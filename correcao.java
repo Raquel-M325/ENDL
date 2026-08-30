@@ -1,0 +1,1 @@
+public class correcao extends RuntimeException
