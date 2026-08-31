@@ -8,12 +8,16 @@ public class arvore implements arvoreAVL {
     } 
 
     public boolean isEmpty(){
-
-    }
-
-    public int size(){
         return size == 0;
     }
 
-    public 
+    public int size(){
+        return size;
+    }
+
+    public boolean isAVL(){
+        //TEM QUE VER SE CADA NÓ ESTA COM BALANCA ENTRE 1 E -1 APENAS
+
+        root 
+    }
 }
