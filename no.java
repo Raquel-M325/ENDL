@@ -19,11 +19,11 @@ public class No{
         return elemento;
     }
 
-    public void setRoot(Object o){
-        this.root = o;
+    public void setRoot(No node){
+        this.root = node;
     }
 
-    public Object getRoot(){
+    public No getRoot(){
         return root;
     }
 
@@ -35,5 +35,23 @@ public class No{
         return chave;
     }
 
-    public void 
+    public void setfilhoDir(No node){
+        this.filhoDir = node;
+
+    }
+
+    public No getfilhoDir(){
+        return filhoDir;
+    }
+
+    public void setfilhoEsq(No node){
+        this.filhoEsq = node;
+
+    }
+    
+    public No getfilhoEsq(){
+        return filhoEsq;
+    }
+
+
 }

@@ -1,5 +1,5 @@
-public class correcao extends RuntimeException{
-    public static String(erro){
+public class Correcao extends RuntimeException{
+    public Correcao(String erro){
         super(erro);
     }
 }
