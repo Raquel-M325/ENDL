@@ -2,14 +2,10 @@ public interface arvoreAVL {
     int size();
     boolean isEmpty();
     boolean isAVL();
-    boolean isRoot();
-    boolean isfilhoDir();
-    boolean isfilhoEsq();
-    void insert(No node);
+    boolean isRoot();;
+    void insert(No node, Object o);
     No remove();
     No find();
-    No getfilhoDir();
-    No getfilhoEsq();
     No getRoot();
     int balancing(No node);
     int height(No node);

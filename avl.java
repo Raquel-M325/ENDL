@@ -1,13 +1,10 @@
 public class arvore implements arvoreAVL {
-    private int size, chave;
-    private No root, filhoDir, filhoEsq;
+    private int size;
+    private No root;
 
     public arvore(){
         this.size = 0;
-        this.chave = 0;
         this.root = null;
-        this.filhoDir = null;
-        this.filhoEsq = null;
     } 
 
     public boolean isEmpty(){
@@ -18,9 +15,12 @@ public class arvore implements arvoreAVL {
         return size;
     }
 
-    public boolean isAVL(){
-        //TEM QUE VER SE CADA NÓ ESTA COM BALANCA ENTRE 1 E -1 APENAS
+    public boolean isAVL() throws Correcao{
+        if (isEmpty()){
+            return true;
+        }
 
+        if
         
     }
 
@@ -36,32 +36,35 @@ public class arvore implements arvoreAVL {
         return root;
     }
 
-    public boolean isfilhoDir(){
+
+    public void insert(No node, Object o){
+        node.setElement(o, chave);
+
+        //cria um novo root 
+        if (isEmpty()){
+            root = node;
+            size++;
+            return;
+        }
+
+        
+    }
+    
+
+    public No remove() throws Correcao{
+        if (isEmpty()){
+            throw new Correcao("Está vazia");
+        }
+
 
     }
 
-    public boolean isfilhoEsq(){
+    public No find() throws Correcao{
+        if (isEmpty()){
+            throw new Correcao("Está vazia");
+        }
 
-    }
-
-    public No getfilhoDir(){
-
-    }
-
-    public No getfilhoEsq(){
-
-    }
-
-    public void insert(No node){
-
-    }
-
-    public No remove(){
-
-    }
-
-    public No find(){
-
+        
     }
 
     
@@ -69,7 +72,12 @@ public class arvore implements arvoreAVL {
 
     }
 
-    public int height(No node){
+    public int height(No node) throws Correcao{
+        if (isRoot() == false) {
+            throw new Correcao("Está vazia");
+        }
+
+
 
     }
 
