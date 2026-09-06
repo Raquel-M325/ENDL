@@ -223,7 +223,11 @@ public class arvore implements arvoreAVL {
 
     
     public int balancing(No node){
+        if (isEmpty()){
+            return 0;
+        }
 
+        
     }
 
     public int height(No node) throws Correcao{
