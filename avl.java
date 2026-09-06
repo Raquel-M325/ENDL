@@ -96,9 +96,28 @@ public class arvore implements arvoreAVL {
             return removido;
         }
         
-        while (true){
+        //enquanto forem diferentes, procure!
+        while (atual.getChave() != node.getChave()){
+        
+            //se a raiz for menor
+            if (atual.getChave() < node.getChave()){
+                
+                if (atual.getfilhoDir() == null){
+                    throw new Correcao("Nó não encontrado");
+                    break;
 
-            
+                }
+
+                
+
+            //se a raiz for maior   
+            } else{
+                if (atual.getfilhoEsq() == null){
+                    throw new Correcao("Nó não encontrado");
+                    break;
+
+                }
+            }
 
         }
 
@@ -112,7 +131,36 @@ public class arvore implements arvoreAVL {
             throw new Correcao("Está vazia");
         }
 
-        
+        No atual = root;
+
+        while (atual.getChave() != node.getChave()){
+            
+            //se for a raiz for menor
+            if (atual.getChave() < node.getChave()){
+
+                //se for nulo
+                if (atual.getfilhoDir() == null){
+                    throw new Correcao("Nó não encontrado");
+                    break;
+                }
+
+                //continue andando para direita até achar igual
+                atual = atual.getfilhoDir();
+
+            } else {
+
+                //se for nulo
+                if (atual.getfilhoEsq() == null){
+                    throw new Correcao("Nó não encontrado");
+                    break;
+                }
+
+                //continue andando para esquerda até achar igual
+                atual = atual.getfilhoEsq();
+            }
+        }
+
+        return atual;
     }
 
     
