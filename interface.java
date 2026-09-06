@@ -4,8 +4,8 @@ public interface arvoreAVL {
     boolean isAVL();
     boolean isRoot();;
     void insert(No node, Object o);
-    No remove();
-    No find();
+    No remove(No node);
+    No find(No node);
     No getRoot();
     int balancing(No node);
     int height(No node);

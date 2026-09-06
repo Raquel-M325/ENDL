@@ -38,7 +38,7 @@ public class arvore implements arvoreAVL {
 
 
     public void insert(No node, Object o){
-        node.setElement(o, chave);
+        node.setElement(o, chave); 
 
         //cria um novo root 
         if (isEmpty()){
@@ -47,19 +47,67 @@ public class arvore implements arvoreAVL {
             return;
         }
 
-        
+        No atual = root;
+
+        while (true){
+            
+            //enquanto for maior que a raiz
+            if (atual.getChave() < node.getChave()){
+
+                if (atual.getfilhoDir() == null){
+                    atual.setfilhoDir(node);
+                    break;
+                }              
+
+                //se não for vazio, continuará no loop
+                atual = atual.getfilhoDir();
+            } 
+            
+            //se for menor que a raiz
+            else {
+
+                if (atual.getfilhoEsq() == null){
+                    atual.setfilhoEsq(node);
+                    break;
+                }
+
+                //se não for vazio, continuará no loop
+                atual = atual.getfilhoEsq();
+            }
+        }
+
+        size++;
     }
     
 
-    public No remove() throws Correcao{
+    public No remove(No node) throws Correcao{
         if (isEmpty()){
             throw new Correcao("Está vazia");
         }
 
+        No atual = root;
+        No removido = null;
+
+        //se for somente raiz existente sem filhos
+        if (atual.getfilhoDir() == null && atual.getfilhoEsq() == null){
+            removido = root;    
+            root = null;
+            size--;
+            return removido;
+        }
+        
+        while (true){
+
+            
+
+        }
+
+        size--;
+        return removido;
 
     }
 
-    public No find() throws Correcao{
+    public No find(No node) throws Correcao{
         if (isEmpty()){
             throw new Correcao("Está vazia");
         }
