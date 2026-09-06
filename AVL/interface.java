@@ -1,3 +1,5 @@
+package AVL;
+
 public interface arvoreAVL {
     int size();
     boolean isEmpty();

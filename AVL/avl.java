@@ -1,3 +1,5 @@
+package AVL;
+
 public class arvore implements arvoreAVL {
     private int size;
     private No root;
@@ -229,7 +231,7 @@ public class arvore implements arvoreAVL {
             throw new Correcao("Está vazia");
         }
 
-
+        
 
     }
 
