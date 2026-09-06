@@ -15,13 +15,17 @@ public class arvore implements arvoreAVL {
         return size;
     }
 
-    public boolean isAVL() throws Correcao{
+    public boolean isAVL(){
         if (isEmpty()){
             return true;
         }
 
-        if
+        //onde ele começa a verificar a partir da raiz se está fora do balanço
+        if (balancing(root) < -1 || balancing(root) > 1){
+            return false;
+        }
         
+        return true;
     }
 
     public boolean isRoot(){
@@ -87,6 +91,7 @@ public class arvore implements arvoreAVL {
 
         No atual = root;
         No removido = null;
+        No pai = null;
 
         //se for somente raiz existente sem filhos
         if (atual.getfilhoDir() == null && atual.getfilhoEsq() == null){
@@ -96,6 +101,40 @@ public class arvore implements arvoreAVL {
             return removido;
         }
         
+        //se for querer tirar root, mesmo com os filhos
+        if (atual.getChave() == node.getChave()){
+
+            while (true){
+                pai = atual;
+                atual = atual.getfilhoDir(); //anda
+
+                //se já achou
+                if (atual.getfilhoEsq() == null){
+                    break;
+
+                } else {
+                    pai = atual;
+                    atual = atual.getfilhoEsq(); //continua por outro caminho salvando
+                }
+            }
+
+            //sempre o direito fica no lugar
+            if (pai.getfilhoDir() == atual){
+                pai.setfilhoDir(atual.getfilhoDir());
+                root.setElement(atual.getElement()); //não quero ter trabalho de trocar nó
+                root.setChave(atual.getChave()); //então só basta trocar o elemento e chave
+            } 
+
+            if (pai.getfilhoEsq() == atual){
+                pai.setfilhoEsq(atual.getfilhoDir());
+                root.setElement(atual.getElement());
+                root.setChave(atual.getChave());
+            }
+
+            size--;
+            return root;
+        }
+
         //enquanto forem diferentes, procure!
         while (atual.getChave() != node.getChave()){
         
@@ -108,22 +147,39 @@ public class arvore implements arvoreAVL {
 
                 }
 
-                
+                //precisa dizer quem será pai e filho antes de retirar
+                pai = atual;
+                atual = atual.getfilhoDir(); 
 
             //se a raiz for maior   
             } else{
                 if (atual.getfilhoEsq() == null){
                     throw new Correcao("Nó não encontrado");
                     break;
-
                 }
+
+                pai = atual; //grava quem era o pai
+                atual = atual.getfilhoEsq(); //aqui ele substitui do atual para filho
+
             }
 
         }
 
+        removido = atual; 
+        
+        //preciso remover, mas preciso saber quem do atual peguei para desligar
+        if (pai.getfilhoDir() == atual){
+            pai.setfilhoDir(null);
+            removido = atual;
+        }
+
+        if (pai.getfilhoEsq() == atual){
+            pai.setfilhoEsq(null);
+            removido = atual;
+        }
+
         size--;
         return removido;
-
     }
 
     public No find(No node) throws Correcao{
