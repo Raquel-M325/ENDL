@@ -64,6 +64,7 @@ public class arvore implements arvoreAVL {
 
         No atual = root;
 
+        //momento da insercao
         while (true){
             
             //enquanto for maior que a raiz
@@ -92,6 +93,8 @@ public class arvore implements arvoreAVL {
         }
 
         size++;
+
+        
     }
     
 
@@ -263,10 +266,19 @@ public class arvore implements arvoreAVL {
     }
 
     public No rotationEsq(No node){
+        No filho = node.getfilhoDir();
+        node.setfilhoDir(filho.getfilhoEsq()); //lembrando que há irmao
+        filho.setfilhoEsq(node); 
         
+        return filho;
     }
 
     public No rotationDir(No node){
+        No filho = node.getfilhoEsq();
+        node.setfilhoEsq(filho.getfilhoDir()); //trocar de lugar
+        filho.setfilhoDir(node);
+
+        return filho; 
 
     }
 
