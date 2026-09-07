@@ -92,9 +92,14 @@ public class arvore implements arvoreAVL {
             }
         }
 
-        size++;
+        verificarNo(atual, node); 
+        size++;  
+    }
 
+    private No verificarNo(No atual, No node){
         
+
+
     }
     
 
@@ -192,9 +197,8 @@ public class arvore implements arvoreAVL {
             removido = atual;
         }
 
+        verificarNo(atual, node); 
         size--;
-
-        
         return removido;
     }
 
@@ -248,7 +252,7 @@ public class arvore implements arvoreAVL {
     private int balancing(No atual){
         
         //esquerda - direita, ficará subindo contando das alturas e faz a subtração
-        return height(atual.getfilhoEsq()) - height(atual.getfilhoDir());
+        return altura(atual.getfilhoEsq()) - altura(atual.getfilhoDir());
     }
 
     //pega a partir da raiz
@@ -306,6 +310,10 @@ public class arvore implements arvoreAVL {
             throw new Correcao("Árvore vazia");
         }
 
+        if (node == null){
+            return ""; 
+        }
 
+        return mostrar(node.getfilhoEsq()) + node.getChave() + mostrar(node.getfilhoDir()); 
     }
 }
