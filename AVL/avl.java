@@ -53,53 +53,60 @@ public class arvore implements arvoreAVL {
 
 
     public void insert(No node, Object o){
-        node.setElement(o, chave); 
+        node.setElement(o);
 
-        //cria um novo root 
-        if (isEmpty()){
-            root = node;
-            size++;
-            return;
-        }
-
-        No atual = root;
-
-        //momento da insercao
-        while (true){
-            
-            //enquanto for maior que a raiz
-            if (atual.getChave() < node.getChave()){
-
-                if (atual.getfilhoDir() == null){
-                    atual.setfilhoDir(node);
-                    break;
-                }              
-
-                //se não for vazio, continuará no loop
-                atual = atual.getfilhoDir();
-            } 
-            
-            //se for menor que a raiz
-            else {
-
-                if (atual.getfilhoEsq() == null){
-                    atual.setfilhoEsq(node);
-                    break;
-                }
-
-                //se não for vazio, continuará no loop
-                atual = atual.getfilhoEsq();
-            }
-        }
-
-        verificarNo(atual, node); 
-        size++;  
+        root = verificarNoInsert(root, node); //faz a insercao de forma recursiva para ficar log
+        size++;
     }
 
-    private No verificarNo(No atual, No node){
-        
+    private No verificarNoInsert(No atual, No node){
+        //precisa chegar ate filho que seja null, para depois quando voltar, comeca a verificar em cada No
+        //precisa chamar o balanceamento, verificacao de sinais e rotacoes
 
+        if (atual == null){
+            return node; //se achar qualquer um vazio, já coloca
+        }
 
+        //lembre-se que é diferente do while, é recursivo!
+        if (atual.getChave() > node.getChave()){
+            atual.setfilhoEsq(verificarNoInsert(atual.getfilhoEsq()), node); //além de colocar um novo no, irá andar recursivamente para o proximo
+
+        } else {
+            atual.setfilhoDir(verificarNoInsert(atual.getfilhoDir()), node); //segue ainda a logica do direito para maior, esquerda o menor que a raiz
+        }
+
+        atualizaAltura(atual);
+
+        int balanca = balancing(atual); //irá definir quem está com maior peso da balanca que é o "pai"
+
+        //caso do LR
+        //tem muito filho esquerdo
+        if (balanca > 1){
+            int balancaFilhoEsq = balancing(atual.getfilhoEsq());
+
+            //tem muito filho direito
+            if (balancaFilhoEsq < 0){
+                atual.setfilhoEsq(rotationEsq(atual.getfilhoEsq()));
+            }
+
+            return rotationDir(atual);
+        } 
+
+        //caso do RL
+        //tem muito filho direito
+        if (balanca < -1){
+            int balancaFilhoDir = balancing(atual.getfilhoDir());
+
+            //tem muito filho esquerdo
+            if (balancaFilhoDir > 0){
+                atual.setfilhoDir(rotationDir(atual.getfilhoDir()));
+            }
+
+            return rotationEsq(atual);
+
+        }
+
+        return atual;
     }
     
 
@@ -197,7 +204,7 @@ public class arvore implements arvoreAVL {
             removido = atual;
         }
 
-        verificarNo(atual, node); 
+        root = verificarNo(root, node); 
         size--;
         return removido;
     }
