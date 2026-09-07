@@ -3,11 +3,12 @@ package AVL;
 public class No{
     private Object elemento; 
     private No root, filhoDir, filhoEsq;
-    private int chave;
+    private int chave, altura;
 
     public No(Object elemento, int chave){
         this.elemento = elemento;
         this.chave = chave;
+        this.altura = 0;
         this.root = null;
         this.filhoDir = null;
         this.filhoEsq = null;
@@ -55,5 +56,11 @@ public class No{
         return filhoEsq;
     }
 
+    public void setAltura(int o){
+        this.altura = o; 
+    }
 
+    public int getAltura(){
+        return altura;
+    }
 }

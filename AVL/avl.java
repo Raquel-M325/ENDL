@@ -193,6 +193,8 @@ public class arvore implements arvoreAVL {
         }
 
         size--;
+
+        
         return removido;
     }
 
@@ -249,27 +251,42 @@ public class arvore implements arvoreAVL {
         return height(atual.getfilhoEsq()) - height(atual.getfilhoDir());
     }
 
+    //pega a partir da raiz
     public int height() throws Correcao{
         if (isRoot() == false) {
             throw new Correcao("Está vazia");
         }
 
-        return height(root);
+        return root.getAltura();
     }
 
-    private int height(No atual){
+    //ve o atual da altura
+    private int altura(No atual){
         if (atual == null){ //não tiver raiz
             return -1;
         }
 
-        return 1 + Math.max(height(atual.getfilhoEsq()), height(atual.getfilhoDir()));
+        return atual.getAltura();
     }
+
+    //calcula a altura 
+    private void atualizaAltura(No atual){
+        atual.setAltura(1 + Math.max((
+            altura(atual.getfilhoEsq())), 
+            altura(atual.getfilhoDir()
+        )));
+    }
+
 
     public No rotationEsq(No node){
         No filho = node.getfilhoDir();
         node.setfilhoDir(filho.getfilhoEsq()); //lembrando que há irmao
         filho.setfilhoEsq(node); 
         
+        //olhar sempre a altura e atualizar 
+        atualizaAltura(node);
+        atualizaAltura(filho); 
+
         return filho;
     }
 
@@ -278,8 +295,10 @@ public class arvore implements arvoreAVL {
         node.setfilhoEsq(filho.getfilhoDir()); //trocar de lugar
         filho.setfilhoDir(node);
 
-        return filho; 
+        atualizaAltura(node); 
+        atualizaAltura(filho); 
 
+        return filho; 
     }
 
     public String mostrar(No node) throws Correcao{
