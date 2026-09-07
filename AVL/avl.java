@@ -21,13 +21,22 @@ public class arvore implements arvoreAVL {
         if (isEmpty()){
             return true;
         }
+        
+        return isAVL(root);
+    }
 
-        //onde ele começa a verificar a partir da raiz se está fora do balanço
-        if (balancing(root) < -1 || balancing(root) > 1){
+    private boolean isAVL(No atual){
+        if (atual == null){
+            return true;
+        }
+
+        //onde ele começa a verificar se está fora do balanço em toda arvore, senao retorna true se está ok
+        if (balancing(atual) < -1 || balancing(atual) > 1){
             return false;
         }
-        
-        return true;
+
+        return isAVL(atual.getfilhoEsq()) && isAVL(atual.getfilhoDir());
+
     }
 
     public boolean isRoot(){
@@ -222,28 +231,50 @@ public class arvore implements arvoreAVL {
     }
 
     
-    public int balancing(No node){
+    public int balancing(){
         if (isEmpty()){
             return 0;
         }
 
+        return balancing(root);
         
     }
 
-    public int height(No node) throws Correcao{
+    private int balancing(No atual){
+        
+        //esquerda - direita, ficará subindo contando das alturas e faz a subtração
+        return height(atual.getfilhoEsq()) - height(atual.getfilhoDir());
+    }
+
+    public int height() throws Correcao{
         if (isRoot() == false) {
             throw new Correcao("Está vazia");
         }
 
-        
+        return height(root);
+    }
 
+    private int height(No atual){
+        if (atual == null){ //não tiver raiz
+            return -1;
+        }
+
+        return 1 + Math.max(height(atual.getfilhoEsq()), height(atual.getfilhoDir()));
     }
 
     public No rotationEsq(No node){
-
+        
     }
 
     public No rotationDir(No node){
+
+    }
+
+    public String mostrar(No node) throws Correcao{
+        if (isEmpty()){
+            throw new Correcao("Árvore vazia");
+        }
+
 
     }
 }
