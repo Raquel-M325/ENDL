@@ -215,6 +215,7 @@ public class arvoreAVL extends arvore implements arvoreAVLInterface{
 
     @Override
     public String mostrar(No node) throws Correcao {
+
         if (isEmpty()) {
             throw new Correcao("Árvore vazia");
         }
@@ -223,8 +224,84 @@ public class arvoreAVL extends arvore implements arvoreAVLInterface{
             return "";
         }
 
-        return mostrar(node.getfilhoEsq())
-            + node.getChave() + " [" + balancing(node) + "] "
-            + mostrar(node.getfilhoDir());
+        int linhas = height() + 1;
+        int larguraNo = 8;
+        int colunas = (int) Math.pow(2, linhas) * larguraNo;
+
+        char[][] matriz = new char[linhas][colunas];
+
+        for (int i = 0; i < linhas; i++) {
+            for (int j = 0; j < colunas; j++) {
+                matriz[i][j] = ' ';
+            }
+        }
+
+        preencherMatriz(node, matriz, 0, colunas / 2, linhas);
+
+        StringBuilder resultado = new StringBuilder();
+
+        for (int i = 0; i < linhas; i++) {
+
+            int ultimo = colunas - 1;
+
+            while (ultimo >= 0 && matriz[i][ultimo] == ' ') {
+                ultimo--;
+            }
+
+            for (int j = 0; j <= ultimo; j++) {
+                resultado.append(matriz[i][j]);
+            }
+
+            resultado.append("\n");
+        }
+
+        return resultado.toString();
+    }
+
+    protected void preencherMatriz(No node, char[][] matriz, int linha, int coluna, int altura) {
+        if (node == null) {
+            return;
+        }
+
+        String valor = node.getChave() + " [" + balancing(node) + "]";
+
+        int inicio = coluna - valor.length() / 2;
+
+        for (int i = 0; i < valor.length(); i++) {
+
+            int posicao = inicio + i;
+
+            if (posicao >= 0 && posicao < matriz[linha].length) {
+                matriz[linha][posicao] = valor.charAt(i);
+            }
+        }
+
+        if (linha == altura - 1) {
+            return;
+        }
+
+        int distancia = (int) Math.pow(2, altura - linha - 2) * 4;
+
+        if (node.getfilhoEsq() != null) {
+
+            preencherMatriz(
+                node.getfilhoEsq(),
+                matriz,
+                linha + 1,
+                coluna - distancia,
+                altura
+            );
+        }
+
+        if (node.getfilhoDir() != null) {
+
+            preencherMatriz(
+                node.getfilhoDir(),
+                matriz,
+                linha + 1,
+                coluna + distancia,
+                altura
+            );
+        }
     }
 }

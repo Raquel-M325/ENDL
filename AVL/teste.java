@@ -1,64 +1,56 @@
 package AVL;
 
 public class teste {
-
     public static void main(String[] args) {
 
         arvoreAVL arvore = new arvoreAVL();
 
-        // Criando os nós
         No no1 = new No("10", 10);
-        No no2 = new No("20", 20);
-        No no3 = new No("30", 30);
+        No no2 = new No("5", 5);
+        No no3 = new No("15", 15);
+        No no4 = new No("2", 2);
+        No no5 = new No("8", 8);
+        No no6 = new No("22", 22);
 
-        // Inserindo
         arvore.insert(no1, "10");
-        arvore.insert(no2, "20");
-        arvore.insert(no3, "30");
+        arvore.insert(no2, "5");
+        arvore.insert(no3, "15");
+        arvore.insert(no4, "2");
+        arvore.insert(no5, "8");
+        arvore.insert(no6, "22");
 
-        // Verificando a árvore após as inserções
-        System.out.println("===== APÓS INSERÇÕES =====");
-        System.out.println("Tamanho: " + arvore.size());
-        System.out.println("É AVL? " + arvore.isAVL());
-        System.out.println("Raiz: " + arvore.getRoot().getChave());
-        System.out.println("Altura: " + arvore.height());
-        System.out.println("Balanceamento da raiz: " + arvore.balancing());
-        System.out.println("Árvore: " + arvore.mostrar(arvore.getRoot()));
+        System.out.println("===== 1 - ÁRVORE INICIAL =====");
+        System.out.println(arvore.mostrar(arvore.getRoot()));
 
-        // Testando busca
-        System.out.println("\n===== BUSCA =====");
 
-        No busca = new No("20", 20);
+        No no7 = new No("25", 25);
+
+        arvore.insert(no7, "25");
+
+        System.out.println("===== 2 - APÓS INSERIR 25 =====");
+        
+        System.out.println(arvore.mostrar(arvore.getRoot()));
+
+
+        System.out.println("===== 3 - APÓS ROTAÇÃO À ESQUERDA =====");
+        System.out.println(arvore.mostrar(arvore.getRoot()));
+
+
+        No remover = new No("5", 5);
 
         try {
-            No encontrado = arvore.find(busca);
-            System.out.println("Nó encontrado: " + encontrado.getChave());
+
+            arvore.remove(remover);
 
         } catch (Correcao erro) {
+
             System.out.println(erro.getMessage());
 
         }
 
-        // Testando remoção
-        System.out.println("\n===== REMOÇÃO =====");
+        System.out.println("===== 4 - APÓS REMOVER 5 =====");
+        System.out.println(arvore.mostrar(arvore.getRoot()));
 
-        No remover = new No("30", 30);
-
-        try {
-            No removido = arvore.remove(remover);
-            System.out.println("Nó removido: " + removido.getChave());
-
-        } catch (Correcao erro) {
-            System.out.println(erro.getMessage());
-        }
-
-        // Verificando novamente
-        System.out.println("\n===== APÓS REMOÇÃO =====");
-        System.out.println("Tamanho: " + arvore.size()); 
-        System.out.println("É AVL? " + arvore.isAVL());
-        System.out.println("Raiz: " + arvore.getRoot().getChave());
-        System.out.println("Altura: " + arvore.height());
-        System.out.println("Balanceamento da raiz: " + arvore.balancing());
-        System.out.println("Árvore: " + arvore.mostrar(arvore.getRoot()));
     }
+
 }
