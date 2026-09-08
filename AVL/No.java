@@ -2,14 +2,13 @@ package AVL;
 
 public class No{
     private Object elemento; 
-    private No root, filhoDir, filhoEsq;
+    private No filhoDir, filhoEsq;
     private int chave, altura;
 
     public No(Object elemento, int chave){
         this.elemento = elemento;
         this.chave = chave;
         this.altura = 0;
-        this.root = null;
         this.filhoDir = null;
         this.filhoEsq = null;
     }
@@ -20,14 +19,6 @@ public class No{
 
     public Object getElement(){
         return elemento;
-    }
-
-    public void setRoot(No node){
-        this.root = node;
-    }
-
-    public No getRoot(){
-        return root;
     }
 
     public void setChave(int o){
