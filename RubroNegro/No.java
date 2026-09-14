@@ -4,6 +4,7 @@ public class No{
     private Object elemento; 
     private No filhoDir, filhoEsq;
     private int chave, altura;
+    private Object cor;
 
     public No(Object elemento, int chave){
         this.elemento = elemento;
@@ -11,6 +12,19 @@ public class No{
         this.altura = 0;
         this.filhoDir = null;
         this.filhoEsq = null;
+        this.cor = "Rubro";
+    }
+
+    public void setCorPreto(){
+        this.cor = "Preto";
+    }
+
+    public void setCorRubro(){
+        this.cor = "Rubro";
+    }
+
+    public Object getCor(){
+        return cor; //retorna a cor do nó para eu saber
     }
 
     public void setElement(Object o){
