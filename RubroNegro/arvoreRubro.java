@@ -76,12 +76,21 @@ public class arvoreRubro extends arvore implements arvoreRubroInterface{
 
                     //caso LR
                     if (){
-
+                        rotationEsq(atual);
+                        rotationDir(avo);
+                        avo.setCorRubro();
+                        atual.setCorRubro();
+                        atual.getFilhoDir().setCorNegro();
                     }
 
                     //caso RL
                     if (){
-
+                        rotationDir(atual); //movera com o filho esquerdo
+                        rotationEsq(avo);
+                        avo.setCorRubro();
+                        atual.setCorRubro();
+                        atual.getFilhoEsq().setCorNegro(); //nao esta totalmente seguro, pois o filho pode ter se perdido
+                        
                     }
 
 
