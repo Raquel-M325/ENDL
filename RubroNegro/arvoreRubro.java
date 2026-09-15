@@ -42,7 +42,7 @@ public class arvoreRubro extends arvore implements arvoreRubroInterface{
         if (atual.getChave() > node.getChave()){
             No avo = atual; //nao esta totalmente certo
 
-            atual.setfilhoEsq(verificarNoInsert(atual.getfilhoEsq(), node.set)); //além de colocar um novo no, irá andar recursivamente para o proximo
+            atual.setfilhoEsq(verificarNoInsert(atual.getfilhoEsq(), node)); //além de colocar um novo no, irá andar recursivamente para o proximo
 
             if (atual.getCor().equals("Rubro") == node.getCor().equals("Rubro")){
 
