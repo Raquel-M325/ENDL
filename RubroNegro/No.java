@@ -4,7 +4,7 @@ public class No{
     private Object elemento; 
     private No filhoDir, filhoEsq;
     private int chave, altura;
-    private Object cor;
+    private String cor;
 
     public No(Object elemento, int chave){
         this.elemento = elemento;
