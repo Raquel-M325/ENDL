@@ -3,20 +3,25 @@ package RubroNegro;
 import AVL.arvoreAVLInterface;
 
 public class arvoreRubro extends arvore implements arvoreRubroInterface{
-    public boolean isRubroNegro(){
-        
-    }
 
     public int balancing(No node){ //balancea os nó negro
 
     }
 
-    public No rotationEsq(No node){
-
+     public No rotationEsq(No node){
+        No filho = node.getfilhoDir();
+        node.setfilhoDir(filho.getfilhoEsq()); //lembrando que há irmao
+        filho.setfilhoEsq(node); 
+        
+        return filho;
     }
 
     public No rotationDir(No node){
-        
+        No filho = node.getfilhoEsq();
+        node.setfilhoEsq(filho.getfilhoDir()); //trocar de lugar
+        filho.setfilhoDir(node);
+
+        return filho; 
     }
 
     @Override 
@@ -59,28 +64,28 @@ public class arvoreRubro extends arvore implements arvoreRubroInterface{
                 else if (tio != null && tio.getCor().equals("Negro") || tio == null) {
 
                     //caso RR
-                    if (balacing(avo) > 1){
+                    if (balancing(avo) > 1){
                         rotationDir(avo); //a rotacao já move junto com pai atual
                         avo.setCorRubro();
-                        atual.setCorNegro();
+                        atual.setCorPreto();
 
                     }
 
                     //caso LL
-                    if (balacing(avo) < -1){
+                    if (balancing(avo) < -1){
                         rotationEsq(avo); //a rotacao já move junto com pai atual
                         avo.setCorRubro();
-                        atual.setCorNegro();
+                        atual.setCorPreto();
 
                     }
 
                     //caso LR
-                    if (){
+                    if (balancing(avo) ){
                         rotationEsq(atual);
                         rotationDir(avo);
                         avo.setCorRubro();
                         atual.setCorRubro();
-                        atual.getFilhoDir().setCorNegro();
+                        atual.getfilhoDir().setCorPreto();
                     }
 
                     //caso RL
@@ -89,7 +94,7 @@ public class arvoreRubro extends arvore implements arvoreRubroInterface{
                         rotationEsq(avo);
                         avo.setCorRubro();
                         atual.setCorRubro();
-                        atual.getFilhoEsq().setCorNegro(); //nao esta totalmente seguro, pois o filho pode ter se perdido
+                        atual.getfilhoEsq().setCorPreto(); //nao esta totalmente seguro, pois o filho pode ter se perdido
                         
                     }
 
