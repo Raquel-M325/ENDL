@@ -8,7 +8,7 @@ public class arvoreRubro extends arvore implements arvoreRubroInterface{
 
     }
 
-     public No rotationEsq(No node){
+    public No rotationEsq(No node){
         No filho = node.getfilhoDir();
         node.setfilhoDir(filho.getfilhoEsq()); //lembrando que há irmao
         filho.setfilhoEsq(node); 
