@@ -2,7 +2,7 @@ package RubroNegro;
 
 public class No{
     private Object elemento; 
-    private No filhoDir, filhoEsq;
+    private No filhoDir, filhoEsq, pai;
     private int chave, altura;
     private String cor;
 
@@ -12,6 +12,7 @@ public class No{
         this.altura = 0;
         this.filhoDir = null;
         this.filhoEsq = null;
+        this.pai = null;
         this.cor = "Rubro";
     }
 
@@ -43,6 +44,15 @@ public class No{
         return chave;
     }
 
+    public void setPai(No node){
+         this.pai = node; 
+        
+    }
+
+    public No getPai(){
+        return pai;
+    }
+    
     public void setfilhoDir(No node){
         this.filhoDir = node;
 
