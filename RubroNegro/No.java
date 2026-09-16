@@ -23,7 +23,7 @@ public class No{
         this.cor = "Rubro";
     }
 
-    public Object getCor(){
+    public String getCor(){
         return cor; //retorna a cor do nó para eu saber
     }
 
