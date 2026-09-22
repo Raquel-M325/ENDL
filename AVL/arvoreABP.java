@@ -5,7 +5,7 @@ public interface arvoreABP {
     boolean isEmpty();
     boolean isRoot();
     void insert(No node, Object o);
-    No remove(No node) throws Correcao;
+    No verificarAntesRemove(No node) throws Correcao;
     No find(No node) throws Correcao;
     No getRoot();
     int height() throws Correcao;

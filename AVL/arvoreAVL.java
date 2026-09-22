@@ -82,19 +82,19 @@ public class arvoreAVL extends arvore implements arvoreAVLInterface{
     }
     
     @Override //já usando o metodo principal da arvore, mas com balanceamento
-    public No remove(No node) throws Correcao{
+    public No verificarAntesRemove(No node) throws Correcao{
         if (isEmpty()){
             throw new Correcao("Está vazia");
         }
 
 
         No removido = find(node);
-        root = verificarNoRemove(root, node); 
+        root = RemoveNo(root, node); 
         size--;
         return removido;
     }
 
-    protected No verificarNoRemove(No atual, No node){
+    protected No RemoveNo(No atual, No node){
         //preciso usar a forma recursiva para acessar o No e retirar para depois voltar
 
         //se achar que está null, entao fara nada alem de null, pois não foi encontrado
@@ -103,12 +103,12 @@ public class arvoreAVL extends arvore implements arvoreAVLInterface{
         }
 
         if (atual.getChave() > node.getChave()){
-            atual.setfilhoEsq(verificarNoRemove(atual.getfilhoEsq(), node));
+            atual.setfilhoEsq(RemoveNo(atual.getfilhoEsq(), node));
 
         } 
         
         else if (atual.getChave() < node.getChave()){
-            atual.setfilhoDir(verificarNoRemove(atual.getfilhoDir(), node));
+            atual.setfilhoDir(RemoveNo(atual.getfilhoDir(), node));
         } 
         
         //caso forem iguais, achando o que quer eliminar, precisa ver se há algum irmao, para que a recursao faça a ligacao
@@ -128,7 +128,7 @@ public class arvoreAVL extends arvore implements arvoreAVLInterface{
                 atual.setChave(sucessor.getChave());
                 atual.setElement(sucessor.getElement());
 
-                atual.setfilhoDir(verificarNoRemove(atual.getfilhoDir(), sucessor));                
+                atual.setfilhoDir(RemoveNo(atual.getfilhoDir(), sucessor));                
             }
 
         }

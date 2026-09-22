@@ -77,7 +77,7 @@ public class teste {
 
                     try {
 
-                        arvore.remove(remover);
+                        arvore.verificarAntesRemove(remover);
 
                         System.out.println(
                             "Nó removido com sucesso!"
