@@ -2,7 +2,7 @@ package RubroNegro;
 
 public class arvore implements arvoreABP{ 
     protected int size;
-    protected  No root;
+    protected No root;
 
     public arvore(){
         this.size = 0;
@@ -30,14 +30,14 @@ public class arvore implements arvoreABP{
     }
 
     //sem balanceamento
-    public void insert(No node, Object o){
+    public void verificarAntesInsert(No node, Object o){
         node.setElement(o);
 
-        root = verificarNoInsert(root, node); //faz a insercao de forma recursiva para ficar log
+        root = InsertNo(root, node); //faz a insercao de forma recursiva para ficar log
         size++;
     }
 
-    protected No verificarNoInsert(No atual, No node){
+    protected No InsertNo(No atual, No node){
         //precisa chegar ate filho que seja null, para depois quando voltar, comeca a verificar em cada No
         //precisa chamar o balanceamento, verificacao de sinais e rotacoes
 
@@ -47,29 +47,30 @@ public class arvore implements arvoreABP{
 
         //lembre-se que é diferente do while, é recursivo!
         if (atual.getChave() > node.getChave()){
-            atual.setfilhoEsq(verificarNoInsert(atual.getfilhoEsq(), node)); //além de colocar um novo no, irá andar recursivamente para o proximo
+            atual.setfilhoEsq(InsertNo(atual.getfilhoEsq(), node)); //além de colocar um novo no, irá andar recursivamente para o proximo
 
         } else {
-            atual.setfilhoDir(verificarNoInsert(atual.getfilhoDir(), node)); //segue ainda a logica do direito para maior, esquerda o menor que a raiz
+            atual.setfilhoDir(InsertNo(atual.getfilhoDir(), node)); //segue ainda a logica do direito para maior, esquerda o menor que a raiz
         }
 
         return atual;
     }
     
 
-    public No remove(No node) throws Correcao{
+    public No verificarAntesRemove(No node) throws Correcao{
         if (isEmpty()){
             throw new Correcao("Está vazia");
         }
 
     
         No removido = find(node);
-        root = verificarNoRemove(root, node); 
+        root = RemoveNo(root, node); 
         size--;
         return removido;
     }
 
-    protected No verificarNoRemove(No atual, No node){
+
+    protected No RemoveNo(No atual, No node){
         //preciso usar a forma recursiva para acessar o No e retirar para depois voltar
 
         //se achar que está null, entao fara nada alem de null, pois não foi encontrado
@@ -78,12 +79,12 @@ public class arvore implements arvoreABP{
         }
 
         if (atual.getChave() > node.getChave()){
-            atual.setfilhoEsq(verificarNoRemove(atual.getfilhoEsq(), node));
+            atual.setfilhoEsq(RemoveNo(atual.getfilhoEsq(), node));
 
         } 
         
         else if (atual.getChave() < node.getChave()){
-            atual.setfilhoDir(verificarNoRemove(atual.getfilhoDir(), node));
+            atual.setfilhoDir(RemoveNo(atual.getfilhoDir(), node));
         } 
         
         //caso forem iguais, achando o que quer eliminar, precisa ver se há algum irmao, para que a recursao faça a ligacao
@@ -103,7 +104,7 @@ public class arvore implements arvoreABP{
                 atual.setChave(sucessor.getChave());
                 atual.setElement(sucessor.getElement());
 
-                atual.setfilhoDir(verificarNoRemove(atual.getfilhoDir(), sucessor));                
+                atual.setfilhoDir(RemoveNo(atual.getfilhoDir(), sucessor));                
             }
 
         }
@@ -152,32 +153,6 @@ public class arvore implements arvoreABP{
         }
 
         return atual;
-    }
-
-    //pega a partir da raiz
-    public int height() throws Correcao{
-        if (isRoot() == false) {
-            throw new Correcao("Está vazia");
-        }
-
-        return root.getAltura();
-    }
-
-    //ve o atual da altura
-    protected int altura(No atual){
-        if (atual == null){ //não tiver raiz
-            return -1;
-        }
-
-        return atual.getAltura();
-    }
-
-    //calcula a altura 
-    protected void atualizaAltura(No atual){
-        atual.setAltura(1 + Math.max((
-            altura(atual.getfilhoEsq())), 
-            altura(atual.getfilhoDir()
-        ))); 
     }
 
     public String mostrar(No node) throws Correcao{
