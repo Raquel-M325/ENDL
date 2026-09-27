@@ -8,7 +8,7 @@ public class teste {
 
         Scanner entrada = new Scanner(System.in);
 
-        arvoreRubroNegro arvore = new arvoreRubroNegro();
+        arvoreRubro arvore = new arvoreRubro();
 
         int opcao;
 
@@ -20,7 +20,6 @@ public class teste {
             System.out.println("2 - Remover nó");
             System.out.println("3 - Buscar nó");
             System.out.println("4 - Mostrar árvore");
-            System.out.println("5 - Verificar se é RubroNegro");
             System.out.println("0 - Sair");
             System.out.println("================================");
             System.out.print("Digite uma opção: ");
@@ -42,7 +41,7 @@ public class teste {
                         chaveInserir
                     );
 
-                    arvore.insert(
+                    arvore.verificarAntesInsert(
                         novo,
                         elementoInserir
                     );
@@ -77,7 +76,7 @@ public class teste {
 
                     try {
 
-                        arvore.remove(remover);
+                        arvore.verificarAntesRemove(remover);
 
                         System.out.println(
                             "Nó removido com sucesso!"
@@ -134,8 +133,8 @@ public class teste {
                         );
 
                         System.out.println(
-                            "Fator de balanceamento: "
-                            + arvore.balancing(encontrado)
+                            "Fator de altura Preto: "
+                            + arvore.alturaPreto(encontrado)
                         );
 
                     } catch (Correcao erro) {
@@ -175,23 +174,6 @@ public class teste {
 
                         System.out.println(
                             erro.getMessage()
-                        );
-                    }
-
-                    break;
-
-                case 5:
-
-                    if (arvore.isRubroNegro()) {
-
-                        System.out.println(
-                            "A árvore é RubroNegro."
-                        );
-
-                    } else {
-
-                        System.out.println(
-                            "A árvore não é RubroNegro."
                         );
                     }
 

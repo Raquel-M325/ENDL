@@ -56,6 +56,10 @@ public class No{
     public void setfilhoDir(No node){
         this.filhoDir = node;
 
+        if (node != null) {
+            node.setPai(this); // Atualiza o pai do filho direito
+        }
+
     }
 
     public No getfilhoDir(){
@@ -64,6 +68,10 @@ public class No{
 
     public void setfilhoEsq(No node){
         this.filhoEsq = node;
+
+        if (node != null) {
+            node.setPai(this); // Atualiza o pai do filho esquerdo
+        }
 
     }
     

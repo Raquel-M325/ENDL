@@ -166,4 +166,15 @@ public class arvore implements arvoreABP{
 
         return mostrar(node.getfilhoEsq()) + node.getChave() + mostrar(node.getfilhoDir()); 
     }
+
+    protected int altura(No atual) {
+        if (atual == null) {
+            return 0;
+        }
+
+        int esquerda = altura(atual.getfilhoEsq());
+        int direita = altura(atual.getfilhoDir());
+
+        return Math.max(esquerda, direita) + 1;
+    }
 }

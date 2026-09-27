@@ -1,22 +1,20 @@
 package RubroNegro;
 
-import AVL.arvoreAVLInterface;
-
 public class arvoreRubro extends arvore implements arvoreRubroInterface{
 
-    public int alturaNegro(No atual){ //conta os no negro e diz sua altura
+    public int alturaPreto(No atual){ //conta os no Preto e diz sua altura
         if (atual == null){
             return 0;
         }
 
-        int esquerda = alturaNegro(atual.getfilhoEsq());
-        int direita = alturaNegro(atual.getfilhoDir());
+        int esquerda = alturaPreto(atual.getfilhoEsq());
+        int direita = alturaPreto(atual.getfilhoDir());
 
         if (esquerda != direita){
 
         }
 
-        if (atual.getCor().equals("Negro")){
+        if (atual.getCor().equals("Preto")){
             return esquerda + 1;
         } else {
             return esquerda;
@@ -26,18 +24,56 @@ public class arvoreRubro extends arvore implements arvoreRubroInterface{
 
     public No rotationEsq(No node){
         No filho = node.getfilhoDir();
+        No pai = node.getPai();
+
         node.setfilhoDir(filho.getfilhoEsq()); //lembrando que há irmao
+        
+        if (node.getfilhoDir() != null){
+            node.getfilhoDir().setPai(node);
+        }
+
         filho.setfilhoEsq(node); 
+
+        filho.setPai(pai);
         node.setPai(filho);
+
+        if (pai == null){
+            root = filho;
+        }
+
+        else if (pai.getfilhoEsq() == node){
+            pai.setfilhoEsq(filho);
+        } else {
+            pai.setfilhoDir(filho);
+        }
          
         return filho;
     }
 
     public No rotationDir(No node){
         No filho = node.getfilhoEsq();
+        No pai = node.getPai();
+
         node.setfilhoEsq(filho.getfilhoDir()); //trocar de lugar
+
+        if (node.getfilhoEsq() != null){
+            node.getfilhoEsq().setPai(node);
+        }
+
         filho.setfilhoDir(node);
+
+        filho.setPai(pai);
         node.setPai(filho);
+
+        if (pai == null){
+            root = filho;
+        } 
+        
+        else if (pai.getfilhoEsq() == node){
+            pai.setfilhoEsq(filho);
+        } else {
+            pai.setfilhoDir(filho);
+        }
 
         return filho; 
     }
@@ -46,96 +82,59 @@ public class arvoreRubro extends arvore implements arvoreRubroInterface{
     public void verificarAntesInsert(No node, Object o){
         node.setElement(o);
 
+        if (isEmpty()){
+            node.setCorPreto();
+        }
+
         root = InsertNo(root, node); //faz a insercao de forma recursiva para ficar log
+        
+        balanceamentoRubroNegro(node);
+
+        root.setCorPreto(); //garante que a raiz sempre será preta
         size++;
     }
 
+    @Override
     protected No InsertNo(No atual, No node){
 
         if (atual == null){
             return node; //se achar qualquer um vazio, já coloca e sendo rubro, inclusive a raiz precisa existir primeiro
         }
 
-        if (atual.getCor().equals("Rubro") && atual == root){
-            node.setCorPreto(); //caso da raiz que precisa ser negro
-            return node;
-        }
-
         //lembre-se que é diferente do while, é recursivo!
         if (atual.getChave() > node.getChave()){
 
             atual.setfilhoEsq(InsertNo(atual.getfilhoEsq(), node)); //além de colocar um novo no, irá andar recursivamente para o proximo
-
-            //verifica se o nó atual e o nó a ser inserido são rubros
-            if (atual.getCor().equals("Rubro") && node.getCor().equals("Rubro")){
-                No avo = atual.getPai().getPai();
-                No tio;
-
-                //o tio pode ser tanto filhodir ou filhoesq do avo
-                if (avo.getfilhoDir() == atual){
-                    tio = avo.getfilhoEsq();
-                } else {
-                    tio = avo.getfilhoDir();
-                }
-
-                //se tiver tio e mesma cor rubro, será recoloracao
-                if (tio != null && tio.getCor().equals("Rubro")) {
-                    tio.setCorPreto();
-                    atual.setCorPreto(); 
-                    avo.setCorRubro();
-                } 
-
-                //caso do tio negro, precisa de rotação
-                else if (tio != null && tio.getCor().equals("Negro") || tio == null) {
-
-                    //caso RR
-                    if (node == atual.getfilhoEsq() && atual == avo.getfilhoEsq()){
-                        rotationDir(avo); //a rotacao já move junto com pai atual
-                        avo.setCorRubro();
-                        atual.setCorPreto();
-
-                    }
-
-                    //caso LL
-                    if (node == atual.getfilhoDir() && atual == avo.getfilhoDir()){
-                        rotationEsq(avo); //a rotacao já move junto com pai atual
-                        avo.setCorRubro();
-                        atual.setCorPreto();
-
-                    }
-
-                    //caso LR
-                    if (node == atual.getfilhoDir() && atual == avo.getfilhoEsq()){
-                        rotationEsq(atual);
-                        rotationDir(avo);
-                        
-                        avo.setCorRubro();
-                        atual.setCorRubro();
-                        node.setCorPreto();
-                    }
-
-                    //caso RL
-                    if (node == atual.getfilhoEsq() && atual == avo.getfilhoDir()){
-                        rotationDir(atual); //movera com o filho esquerdo
-                        rotationEsq(avo);
-
-                        avo.setCorRubro();
-                        atual.setCorRubro();
-                        node.setCorPreto(); 
-                        
-                    }
-                }
-            } 
             
+            if (atual.getfilhoEsq() != null){
+                atual.getfilhoEsq().setPai(atual); //atualiza pai
+            }
+            
+
         } else {
             atual.setfilhoDir(InsertNo(atual.getfilhoDir(), node)); //segue ainda a logica do direito para maior, esquerda o menor que a raiz
             
-            if (atual.getCor().equals("Rubro") && node.getCor().equals("Rubro")){
-                No avo = atual.getPai().getPai();
+            if (atual.getfilhoDir() != null){
+                atual.getfilhoDir().setPai(atual); //atualiza pai
+            }
+
+
+        }
+
+        return atual;
+    }
+
+    protected No balanceamentoRubroNegro(No node){
+
+        if (node.getPai() != null && node.getPai().getPai() != null) {
+
+            //verifica se o nó atual e o nó a ser inserido são rubros
+            if (node.getPai().getCor().equals("Rubro") && node.getCor().equals("Rubro")){
+                No avo = node.getPai().getPai();
                 No tio;
 
                 //o tio pode ser tanto filhodir ou filhoesq do avo
-                if (avo.getfilhoDir() == atual){
+                if (avo.getfilhoDir() == node.getPai()){
                     tio = avo.getfilhoEsq();
                 } else {
                     tio = avo.getfilhoDir();
@@ -144,54 +143,63 @@ public class arvoreRubro extends arvore implements arvoreRubroInterface{
                 //se tiver tio e mesma cor rubro, será recoloracao
                 if (tio != null && tio.getCor().equals("Rubro")) {
                     tio.setCorPreto();
-                    atual.setCorPreto(); 
+                    node.getPai().setCorPreto(); 
                     avo.setCorRubro();
                 } 
 
-                //caso do tio negro, precisa de rotação
-                else if (tio != null && tio.getCor().equals("Negro") || tio == null) {
+                //caso do tio Preto, precisa de rotação
+                else if (tio != null && tio.getCor().equals("Preto") || tio == null) {
 
                     //caso RR
-                    if (node == atual.getfilhoEsq() && atual == avo.getfilhoEsq()){
-                        rotationDir(avo); //a rotacao já move junto com pai atual
+                    if (node == node.getPai().getfilhoEsq() && node.getPai() == avo.getfilhoEsq()){
+                        No novoTopo = rotationDir(avo); //a rotacao já move junto com pai atual, e retorna o filho
                         avo.setCorRubro();
-                        atual.setCorPreto();
+                        novoTopo.setCorPreto();
 
+                        return novoTopo;
                     }
 
                     //caso LL
-                    if (node == atual.getfilhoDir() && atual == avo.getfilhoDir()){
-                        rotationEsq(avo); //a rotacao já move junto com pai atual
+                    if (node == node.getPai().getfilhoDir() && node.getPai() == avo.getfilhoDir()){
+                        No novoTopo = rotationEsq(avo); //a rotacao já move junto com pai atual
                         avo.setCorRubro();
-                        atual.setCorPreto();
+                        novoTopo.setCorPreto();
 
+                        return novoTopo;
                     }
 
                     //caso LR
-                    if (node == atual.getfilhoDir() && atual == avo.getfilhoEsq()){
-                        rotationEsq(atual);
-                        rotationDir(avo);
+                    if (node == node.getPai().getfilhoDir() && node.getPai() == avo.getfilhoEsq()){
+                        No pai = node.getPai();
+                        
+                        rotationEsq(pai); //movera com o filho direito
+                        No novoTopo = rotationDir(avo);
                         
                         avo.setCorRubro();
-                        atual.setCorRubro();
-                        node.setCorPreto();
+                        pai.setCorRubro(); 
+                        novoTopo.setCorPreto();
+
+                        return novoTopo;
                     }
 
                     //caso RL
-                    if (node == atual.getfilhoEsq() && atual == avo.getfilhoDir()){
-                        rotationDir(atual); //movera com o filho esquerdo
-                        rotationEsq(avo);
-
-                        avo.setCorRubro();
-                        atual.setCorRubro();
-                        node.setCorPreto(); 
+                    if (node == node.getPai().getfilhoEsq() && node.getPai() == avo.getfilhoDir()){
+                        No pai = node.getPai();
+                       
+                        rotationDir(pai); //movera com o filho esquerdo
+                        No novoTopo = rotationEsq(avo);
                         
+                        avo.setCorRubro();
+                        pai.setCorRubro(); 
+                        novoTopo.setCorPreto(); 
+                        
+                        return novoTopo;
                     }
                 }
             }
-        }
-        
-        return atual;
+        } 
+
+        return node;
     }
     
     @Override //já usando o metodo principal da arvore, mas com balanceamento
@@ -206,6 +214,7 @@ public class arvoreRubro extends arvore implements arvoreRubroInterface{
         return removido;
     }
 
+    @Override
     protected No RemoveNo(No atual, No node){
         //preciso usar a forma recursiva para acessar o No e retirar para depois voltar
 
@@ -247,5 +256,98 @@ public class arvoreRubro extends arvore implements arvoreRubroInterface{
 
         
         return atual;
+    }
+
+    @Override
+    public String mostrar(No node) throws Correcao {
+
+        if (isEmpty()) {
+            throw new Correcao("Árvore vazia");
+        }
+
+        if (node == null) {
+            return "";
+        }
+
+        int linhas = altura(node);
+        int larguraNo = 12;
+        int colunas = (int) Math.pow(2, linhas) * larguraNo;
+
+        char[][] matriz = new char[linhas][colunas];
+
+        for (int i = 0; i < linhas; i++) {
+            for (int j = 0; j < colunas; j++) {
+                matriz[i][j] = ' ';
+            }
+        }
+
+        preencherMatriz(node, matriz, 0, colunas / 2, linhas);
+
+        StringBuilder resultado = new StringBuilder();
+
+        for (int i = 0; i < linhas; i++) {
+
+            int ultimo = colunas - 1;
+
+            while (ultimo >= 0 && matriz[i][ultimo] == ' ') {
+                ultimo--;
+            }
+
+            for (int j = 0; j <= ultimo; j++) {
+                resultado.append(matriz[i][j]);
+            }
+
+            resultado.append("\n");
+        }
+
+        return resultado.toString();
+    }
+
+
+    protected void preencherMatriz(No node, char[][] matriz, int linha, int coluna, int altura) {
+        if (node == null) {
+            return;
+        }
+
+        String valor = node.getChave() + " [" + node.getCor() + "]";
+
+        int inicio = coluna - valor.length() / 2;
+
+        for (int i = 0; i < valor.length(); i++) {
+
+            int posicao = inicio + i;
+
+            if (posicao >= 0 && posicao < matriz[linha].length) {
+                matriz[linha][posicao] = valor.charAt(i);
+            }
+        }
+
+        if (linha == altura - 1) {
+            return;
+        }
+
+        int distancia = (int) Math.pow(2, altura - linha - 2) * 8;
+
+        if (node.getfilhoEsq() != null) {
+
+            preencherMatriz(
+                node.getfilhoEsq(),
+                matriz,
+                linha + 1,
+                coluna - distancia,
+                altura
+            );
+        }
+
+        if (node.getfilhoDir() != null) {
+
+            preencherMatriz(
+                node.getfilhoDir(),
+                matriz,
+                linha + 1,
+                coluna + distancia,
+                altura
+            );
+        }
     }
 }
