@@ -253,13 +253,18 @@ public class arvoreRubro extends arvore implements arvoreRubroInterface{
         No removido = find(node);
         root = RemoveNo(root, node); 
 
-        balanceamentoRemocao(node);
+        balanceamentoRemocao(removido);
+
+        if (root != null) {
+            root.setCorPreto(); //garante que a raiz sempre será preta
+        }
+
         int altura = alturaPreto(root);
 
         if (altura == -1){
             throw new Correcao("A árvore não está balanceada");
         }
-
+        
         size--;
         return removido;
     }
@@ -304,7 +309,6 @@ public class arvoreRubro extends arvore implements arvoreRubroInterface{
 
         }
 
-        
         return atual;
     }
 
