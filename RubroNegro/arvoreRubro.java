@@ -11,7 +11,7 @@ public class arvoreRubro extends arvore implements arvoreRubroInterface{
         int direita = alturaPreto(atual.getfilhoDir());
 
         if (esquerda != direita){
-
+            
         }
 
         if (atual.getCor().equals("Preto")){
@@ -23,59 +23,68 @@ public class arvoreRubro extends arvore implements arvoreRubroInterface{
 
 
     public No rotationEsq(No node){
-        No filho = node.getfilhoDir();
-        No pai = node.getPai();
+        No avo = node;
+        No paiDoAvo = avo.getPai();
+        No filho = avo.getfilhoDir();
 
-        node.setfilhoDir(filho.getfilhoEsq()); //lembrando que há irmao
-        
-        if (node.getfilhoDir() != null){
-            node.getfilhoDir().setPai(node);
+        avo.setfilhoDir(filho.getfilhoEsq());
+
+        if (avo.getfilhoDir() != null){
+            avo.getfilhoDir().setPai(avo);
         }
 
-        filho.setfilhoEsq(node); 
+        //realiza a rotação para a esquerda
+        filho.setfilhoEsq(avo);
 
-        filho.setPai(pai);
-        node.setPai(filho);
+        //atualiza os pais dos nós envolvidos na rotação
+        filho.setPai(paiDoAvo);
+        avo.setPai(filho);
 
-        if (pai == null){
+        //verifica se o avo é a raiz da árvore
+        if (paiDoAvo == null){
             root = filho;
+        } 
+
+        //caso de rotacao dupla
+        else if (paiDoAvo.getfilhoEsq() == avo){
+            paiDoAvo.setfilhoEsq(filho);
+        } 
+        else {
+            paiDoAvo.setfilhoDir(filho);
         }
 
-        else if (pai.getfilhoEsq() == node){
-            pai.setfilhoEsq(filho);
-        } else {
-            pai.setfilhoDir(filho);
-        }
-         
         return filho;
     }
 
     public No rotationDir(No node){
-        No filho = node.getfilhoEsq();
-        No pai = node.getPai();
+        No avo = node;
+        No paiDoAvo = avo.getPai();
+        No filho = avo.getfilhoEsq();
 
-        node.setfilhoEsq(filho.getfilhoDir()); //trocar de lugar
+        avo.setfilhoEsq(filho.getfilhoDir());
 
-        if (node.getfilhoEsq() != null){
-            node.getfilhoEsq().setPai(node);
+        if (avo.getfilhoEsq() != null){
+            avo.getfilhoEsq().setPai(avo);
         }
 
-        filho.setfilhoDir(node);
+        filho.setfilhoDir(avo);
 
-        filho.setPai(pai);
-        node.setPai(filho);
+        filho.setPai(paiDoAvo);
+        avo.setPai(filho);
 
-        if (pai == null){
+        if (paiDoAvo == null){
             root = filho;
         } 
-        
-        else if (pai.getfilhoEsq() == node){
-            pai.setfilhoEsq(filho);
-        } else {
-            pai.setfilhoDir(filho);
+
+        //caso de rotacao dupla
+        else if (paiDoAvo.getfilhoEsq() == avo){
+            paiDoAvo.setfilhoEsq(filho);
+        } 
+        else {
+            paiDoAvo.setfilhoDir(filho);
         }
 
-        return filho; 
+        return filho;
     }
 
     @Override 
@@ -110,15 +119,12 @@ public class arvoreRubro extends arvore implements arvoreRubroInterface{
                 atual.getfilhoEsq().setPai(atual); //atualiza pai
             }
             
-
         } else {
             atual.setfilhoDir(InsertNo(atual.getfilhoDir(), node)); //segue ainda a logica do direito para maior, esquerda o menor que a raiz
             
             if (atual.getfilhoDir() != null){
                 atual.getfilhoDir().setPai(atual); //atualiza pai
             }
-
-
         }
 
         return atual;
