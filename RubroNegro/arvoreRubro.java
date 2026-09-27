@@ -9,16 +9,46 @@ public class arvoreRubro extends arvore implements arvoreRubroInterface{
 
         int esquerda = alturaPreto(atual.getfilhoEsq());
         int direita = alturaPreto(atual.getfilhoDir());
+        int altura = 0;
+
+        if (esquerda < 0 || direita < 0){
+            return -1; //ha problema por ser negativo
+        }
 
         if (esquerda != direita){
-            
+            return -1; //esta desiquilibrado, precisará corrigir 
         }
 
-        if (atual.getCor().equals("Preto")){
-            return esquerda + 1;
-        } else {
-            return esquerda;
+        //comeca a soma da altura dos caminhos esquerda e direita
+        if (atual.getCor().equals("Preto") && atual.getfilhoEsq() != null){
+            altura += 1 + esquerda;
+        } 
+        
+        else if (atual.getCor().equals("Rubro") && atual.getfilhoEsq() != null) {
+            altura += esquerda;
+        } 
+        
+        else if (atual.getCor().equals("Preto") && atual.getfilhoDir() != null) {
+            altura += 1 + direita;
         }
+
+        else if (atual.getCor().equals("Rubro") && atual.getfilhoDir() != null) {
+            altura += direita;
+        }
+
+        else if (atual.getCor().equals("Preto") && atual.getfilhoEsq() == null && atual.getfilhoDir() == null) {
+            altura += 1;
+        }
+
+        else if (atual.getCor().equals("Rubro") && atual.getfilhoEsq() == null && atual.getfilhoDir() == null) {
+            altura += 0;
+        }
+
+        else {
+            return -1; //caso não seja nenhum dos casos, é desiquilibrado
+        }
+        
+        return altura;
     }
 
 
@@ -88,7 +118,7 @@ public class arvoreRubro extends arvore implements arvoreRubroInterface{
     }
 
     @Override 
-    public void verificarAntesInsert(No node, Object o){
+    public void verificarAntesInsert(No node, Object o) throws Correcao{
         node.setElement(o);
 
         if (isEmpty()){
@@ -100,6 +130,12 @@ public class arvoreRubro extends arvore implements arvoreRubroInterface{
         balanceamentoRubroNegro(node);
 
         root.setCorPreto(); //garante que a raiz sempre será preta
+        int altura = alturaPreto(root);
+
+        if (altura == -1){
+            throw new Correcao("A árvore não está balanceada");
+        }
+
         size++;
     }
 
@@ -216,6 +252,14 @@ public class arvoreRubro extends arvore implements arvoreRubroInterface{
 
         No removido = find(node);
         root = RemoveNo(root, node); 
+
+        balanceamentoRemocao(node);
+        int altura = alturaPreto(root);
+
+        if (altura == -1){
+            throw new Correcao("A árvore não está balanceada");
+        }
+
         size--;
         return removido;
     }
@@ -262,6 +306,10 @@ public class arvoreRubro extends arvore implements arvoreRubroInterface{
 
         
         return atual;
+    }
+
+    protected No balanceamentoRemocao(No node){
+
     }
 
     @Override
