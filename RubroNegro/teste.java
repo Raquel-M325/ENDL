@@ -41,14 +41,23 @@ public class teste {
                         chaveInserir
                     );
 
-                    arvore.verificarAntesInsert(
-                        novo,
-                        elementoInserir
-                    );
+                    try {
 
-                    System.out.println(
-                        "Nó inserido com sucesso!"
-                    );
+                        arvore.verificarAntesInsert(
+                            novo,
+                            elementoInserir
+                        );
+
+                        System.out.println(
+                            "Nó inserido com sucesso!"
+                        );
+
+                    } catch (Correcao erro) {
+
+                        System.out.println(
+                            erro.getMessage()
+                        );
+                    }
 
                     break;
 
