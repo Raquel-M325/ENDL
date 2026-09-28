@@ -75,7 +75,7 @@ public class arvoreRubro extends arvore implements arvoreRubroInterface{
             root = filho;
         } 
 
-        //caso de rotacao dupla
+        //senao, liga o filho no lugar do avo
         else if (paiDoAvo.getfilhoEsq() == avo){
             paiDoAvo.setfilhoEsq(filho);
         } 
@@ -106,7 +106,6 @@ public class arvoreRubro extends arvore implements arvoreRubroInterface{
             root = filho;
         } 
 
-        //caso de rotacao dupla
         else if (paiDoAvo.getfilhoEsq() == avo){
             paiDoAvo.setfilhoEsq(filho);
         } 
@@ -125,11 +124,18 @@ public class arvoreRubro extends arvore implements arvoreRubroInterface{
             node.setCorPreto();
         }
 
+        //todo no novo que nao for a raiz entra como rubro
+        else {
+            node.setCorRubro();
+        }
+
         root = InsertNo(root, node); //faz a insercao de forma recursiva para ficar log
+        root.setPai(null);
         
         balanceamentoRubroNegro(node);
 
         root.setCorPreto(); //garante que a raiz sempre será preta
+        root.setPai(null);
         int altura = alturaPreto(root);
 
         if (altura == -1){
@@ -170,7 +176,7 @@ public class arvoreRubro extends arvore implements arvoreRubroInterface{
 
         if (node.getPai() != null && node.getPai().getPai() != null) {
 
-            //verifica se o nó atual e o nó a ser inserido são rubros
+            //verifica se o nó atual e o pai dele são rubros
             if (node.getPai().getCor().equals("Rubro") && node.getCor().equals("Rubro")){
                 No avo = node.getPai().getPai();
                 No tio;
@@ -187,12 +193,15 @@ public class arvoreRubro extends arvore implements arvoreRubroInterface{
                     tio.setCorPreto();
                     node.getPai().setCorPreto(); 
                     avo.setCorRubro();
+
+                    //o avo ficou rubro e pode ter quebrado a regra com o bisavo, entao sobe
+                    return balanceamentoRubroNegro(avo);
                 } 
 
                 //caso do tio Preto, precisa de rotação
-                else if (tio != null && tio.getCor().equals("Preto") || tio == null) {
+                else if (tio == null || tio.getCor().equals("Preto")) {
 
-                    //caso RR
+                    //caso LL (pai e filho na esquerda)
                     if (node == node.getPai().getfilhoEsq() && node.getPai() == avo.getfilhoEsq()){
                         No novoTopo = rotationDir(avo);
                         avo.setCorRubro();
@@ -201,7 +210,7 @@ public class arvoreRubro extends arvore implements arvoreRubroInterface{
                         return novoTopo;
                     }
 
-                    //caso LL
+                    //caso RR (pai e filho na direita)
                     if (node == node.getPai().getfilhoDir() && node.getPai() == avo.getfilhoDir()){
                         No novoTopo = rotationEsq(avo);
                         avo.setCorRubro();
@@ -210,7 +219,7 @@ public class arvoreRubro extends arvore implements arvoreRubroInterface{
                         return novoTopo;
                     }
 
-                    //caso LR
+                    //caso LR (pai na esquerda e filho na direita)
                     if (node == node.getPai().getfilhoDir() && node.getPai() == avo.getfilhoEsq()){
                         No pai = node.getPai();
                         
@@ -224,7 +233,7 @@ public class arvoreRubro extends arvore implements arvoreRubroInterface{
                         return novoTopo;
                     }
 
-                    //caso RL
+                    //caso RL (pai na direita e filho na esquerda)
                     if (node == node.getPai().getfilhoEsq() && node.getPai() == avo.getfilhoDir()){
                         No pai = node.getPai();
                        
@@ -250,10 +259,31 @@ public class arvoreRubro extends arvore implements arvoreRubroInterface{
             throw new Correcao("Está vazia");
         }
 
+        //antes de remover, procura para ver se o no existe
+        No procurado = root;
+        boolean achou = false;
+
+        while (procurado != null && !achou){
+            if (procurado.getChave() > node.getChave()){
+                procurado = procurado.getfilhoEsq();
+            } 
+            else if (procurado.getChave() < node.getChave()){
+                procurado = procurado.getfilhoDir();
+            } 
+            else {
+                achou = true;
+            }
+        }
+
+        if (!achou){
+            throw new Correcao("Nó não encontrado");
+        }
+
         root = RemoveNo(root, node); 
 
         if (root != null) {
             root.setCorPreto();
+            root.setPai(null);
         }
 
         int altura = alturaPreto(root);
@@ -269,97 +299,115 @@ public class arvoreRubro extends arvore implements arvoreRubroInterface{
     @Override
     protected No RemoveNo(No atual, No node){
 
-        //se achar que está null, entao fara nada alem de null, pois não foi encontrado
+        //se achar que está null, entao fara nada, pois não foi encontrado
         if (atual == null){
-            return null;
+            return root;
         }
 
         //aqui ele procura para achar o no que quer eliminar
         if (atual.getChave() > node.getChave()){
-            atual.setfilhoEsq(RemoveNo(atual.getfilhoEsq(), node));
-
-            //atualiza o pai do filho esquerdo
-            if (atual.getfilhoEsq() != null){
-                atual.getfilhoEsq().setPai(atual);
-            }
-
+            return RemoveNo(atual.getfilhoEsq(), node);
         } 
         
-        else if (atual.getChave() < node.getChave()){
-            atual.setfilhoDir(RemoveNo(atual.getfilhoDir(), node));
-
-            //atualiza o pai do filho direito
-            if (atual.getfilhoDir() != null){
-                atual.getfilhoDir().setPai(atual);
-            }
+        if (atual.getChave() < node.getChave()){
+            return RemoveNo(atual.getfilhoDir(), node);
         } 
         
-        //caso forem iguais, achando o que quer eliminar
-        else {
+        //caso forem iguais, achou o que quer eliminar
 
-            //caso seja rubro e nao tenha filhos, pode remover direto
-            if (atual.getCor().equals("Rubro") && atual.getfilhoDir() == null && atual.getfilhoEsq() == null){
-                return null; 
-            }
+        //caso tenha ambos os filhos, o menor numero da direita copia para o lugar e ele passa a ser o no eliminado
+        if (atual.getfilhoDir() != null && atual.getfilhoEsq() != null){
+            No sucessor = menor(atual.getfilhoDir());
 
-            //caso seja negro e tenha somente um filho rubro a esquerda, pode remover e o filho rubro vira preto
-            if (atual.getCor().equals("Preto") && atual.getfilhoEsq() != null && atual.getfilhoEsq().getCor().equals("Rubro") && atual.getfilhoDir() == null){
-                atual.getfilhoEsq().setCorPreto();
-                atual.getfilhoEsq().setPai(atual.getPai());
-                return atual.getfilhoEsq();
-            } 
+            atual.setChave(sucessor.getChave());
+            atual.setElement(sucessor.getElement());
 
-            //caso seja negro e tenha somente um filho rubro a direita, pode remover e o filho rubro vira preto
-            if (atual.getCor().equals("Preto") && atual.getfilhoDir() != null && atual.getfilhoDir().getCor().equals("Rubro") && atual.getfilhoEsq() == null){
-                atual.getfilhoDir().setCorPreto();
-                atual.getfilhoDir().setPai(atual.getPai());
-                return atual.getfilhoDir();
-            }
-
-            //caso de folha
-            if (atual.getfilhoEsq() == null && atual.getfilhoDir() == null){
-                
-                //folha rubro nao conta
-                if (atual.getCor().equals("Rubro")){
-                    return null;
-                }
-
-                //entra caso de rubro negro
-                No pai = atual.getPai();
-
-                if (pai == null){
-                    return null;
-                }
-
-                boolean esquerda = pai.getfilhoEsq() == atual;
-
-                balanceamentoRemocaoDuploNegro(pai, esquerda);
-
-                return null;
-            }
-
-            //caso tenha somente filho direito
-            if (atual.getfilhoEsq() == null){
-                atual.getfilhoDir().setPai(atual.getPai());
-                return atual.getfilhoDir();
-            }
-
-            //caso tenha ambos os filhos, o menor numero filho direita tera que sair e ficar no lugar da raiz
-            if (atual.getfilhoDir() != null && atual.getfilhoEsq() != null){
-                No sucessor = menor(atual.getfilhoDir());
-
-                atual.setChave(sucessor.getChave());
-                atual.setElement(sucessor.getElement());
-
-                atual.setfilhoDir(RemoveNo(atual.getfilhoDir(), sucessor));
-
-                if (atual.getfilhoDir() != null){
-                    atual.getfilhoDir().setPai(atual);
-                }
-            }
+            atual = sucessor;
         }
 
-        return atual;
+        //a partir daqui o no a eliminar tem no maximo um filho
+        No pai = atual.getPai();
+
+        //caso seja rubro e nao tenha filhos, pode remover direto
+        if (atual.getCor().equals("Rubro") && atual.getfilhoDir() == null && atual.getfilhoEsq() == null){
+
+            if (pai == null){
+                root = null;
+            } 
+            else if (pai.getfilhoEsq() == atual){
+                pai.setfilhoEsq(null);
+            } 
+            else {
+                pai.setfilhoDir(null);
+            }
+
+            return root; 
+        }
+
+        //caso seja negro e tenha somente um filho rubro a esquerda, pode remover e o filho rubro vira preto
+        if (atual.getCor().equals("Preto") && atual.getfilhoEsq() != null && atual.getfilhoEsq().getCor().equals("Rubro") && atual.getfilhoDir() == null){
+            atual.getfilhoEsq().setCorPreto();
+            atual.getfilhoEsq().setPai(pai);
+
+            if (pai == null){
+                root = atual.getfilhoEsq();
+            } 
+            else if (pai.getfilhoEsq() == atual){
+                pai.setfilhoEsq(atual.getfilhoEsq());
+            } 
+            else {
+                pai.setfilhoDir(atual.getfilhoEsq());
+            }
+
+            return root;
+        } 
+
+        //caso seja negro e tenha somente um filho rubro a direita, pode remover e o filho rubro vira preto
+        if (atual.getCor().equals("Preto") && atual.getfilhoDir() != null && atual.getfilhoDir().getCor().equals("Rubro") && atual.getfilhoEsq() == null){
+            atual.getfilhoDir().setCorPreto();
+            atual.getfilhoDir().setPai(pai);
+
+            if (pai == null){
+                root = atual.getfilhoDir();
+            } 
+            else if (pai.getfilhoEsq() == atual){
+                pai.setfilhoEsq(atual.getfilhoDir());
+            } 
+            else {
+                pai.setfilhoDir(atual.getfilhoDir());
+            }
+
+            return root;
+        }
+
+        //caso de folha preta
+        if (atual.getfilhoEsq() == null && atual.getfilhoDir() == null){
+
+            //se for a raiz, a arvore fica vazia
+            if (pai == null){
+                root = null;
+                return root;
+            }
+
+            boolean esquerda = pai.getfilhoEsq() == atual;
+
+            //primeiro corrige com a folha ainda ligada (ela faz o papel do duplo negro)
+            balanceamentoRemocaoDuploNegro(pai, esquerda);
+
+            //depois de corrigir, o pai pode ter mudado por causa das rotacoes, entao pega de novo
+            pai = atual.getPai();
+
+            if (pai.getfilhoEsq() == atual){
+                pai.setfilhoEsq(null);
+            } 
+            else {
+                pai.setfilhoDir(null);
+            }
+
+            return root;
+        }
+
+        return root;
     }
 
     protected No balanceamentoRemocaoDuploNegro(No pai, boolean esquerda){
@@ -377,7 +425,7 @@ public class arvoreRubro extends arvore implements arvoreRubroInterface{
 
                 rotationEsq(pai);
 
-                //depois da rotacao, o irmao passa a ser o novo filho direito
+                //depois da rotacao, o irmao passa a ser o novo filho direito e cai nos outros casos
                 return balanceamentoRemocaoDuploNegro(pai, true);
             } 
 
@@ -409,27 +457,22 @@ public class arvoreRubro extends arvore implements arvoreRubroInterface{
                 pai.setCorPreto();
             }
 
-            //caso 3 - irmao é negro e filhoEsq como rubro do irmao negro -> rotacao e recoloracao
-            else if (pai.getfilhoDir() != null && pai.getfilhoDir().getCor().equals("Preto") && pai.getfilhoDir().getfilhoEsq() != null && pai.getfilhoDir().getfilhoEsq().getCor().equals("Rubro") && (pai.getfilhoDir().getfilhoDir() == null || pai.getfilhoDir().getfilhoDir().getCor().equals("Preto"))){
-                pai.getfilhoDir().getfilhoEsq().setCorPreto();
-                pai.getfilhoDir().setCorRubro();
+            //caso 3 e 4 - irmao é negro e tem pelo menos um filho rubro
+            else {
 
-                rotationDir(pai.getfilhoDir());
+                //caso 3 - filhoEsq do irmao é rubro e o filhoDir é negro -> rotacao e recoloracao, vira o caso 4
+                if (pai.getfilhoDir().getfilhoDir() == null || pai.getfilhoDir().getfilhoDir().getCor().equals("Preto")){
+                    pai.getfilhoDir().getfilhoEsq().setCorPreto();
+                    pai.getfilhoDir().setCorRubro();
 
-                //agora o caso vira o caso 4
-                if (pai.getfilhoDir() != null && pai.getfilhoDir().getfilhoDir() != null){
-                    pai.getfilhoDir().getfilhoDir().setCorPreto();
-                    pai.setCorPreto();
-
-                    rotationEsq(pai);
+                    rotationDir(pai.getfilhoDir());
                 }
-            }
 
-            //caso 4 - irmao é negro e filhodir como rubro do irmao negro
-            else if (pai.getfilhoDir() != null && pai.getfilhoDir().getCor().equals("Preto") && pai.getfilhoDir().getfilhoDir() != null && pai.getfilhoDir().getfilhoDir().getCor().equals("Rubro") && (pai.getfilhoDir().getfilhoEsq() == null || pai.getfilhoDir().getfilhoEsq().getCor().equals("Preto"))){
-
+                //caso 4 - filhoDir do irmao é rubro, o irmao fica com a cor do pai
                 if (pai.getCor().equals("Rubro")){
                     pai.getfilhoDir().setCorRubro();
+                } else {
+                    pai.getfilhoDir().setCorPreto();
                 }
 
                 pai.setCorPreto();
@@ -449,7 +492,7 @@ public class arvoreRubro extends arvore implements arvoreRubroInterface{
 
                 rotationDir(pai);
 
-                //depois da rotacao, o irmao passa a ser o novo filho esquerdo
+                //depois da rotacao, o irmao passa a ser o novo filho esquerdo e cai nos outros casos
                 return balanceamentoRemocaoDuploNegro(pai, false);
             }
 
@@ -481,26 +524,22 @@ public class arvoreRubro extends arvore implements arvoreRubroInterface{
                 pai.setCorPreto();
             }
 
-            //caso 3 - irmao é negro e filhoDir como rubro do irmao negro
-            else if (pai.getfilhoEsq() != null && pai.getfilhoEsq().getCor().equals("Preto") && pai.getfilhoEsq().getfilhoDir() != null && pai.getfilhoEsq().getfilhoDir().getCor().equals("Rubro") && (pai.getfilhoEsq().getfilhoEsq() == null || pai.getfilhoEsq().getfilhoEsq().getCor().equals("Preto"))){
-                pai.getfilhoEsq().getfilhoDir().setCorPreto();
-                pai.getfilhoEsq().setCorRubro();
+            //caso 3 e 4 - irmao é negro e tem pelo menos um filho rubro
+            else {
 
-                rotationEsq(pai.getfilhoEsq());
+                //caso 3 - filhoDir do irmao é rubro e o filhoEsq é negro -> rotacao e recoloracao, vira o caso 4
+                if (pai.getfilhoEsq().getfilhoEsq() == null || pai.getfilhoEsq().getfilhoEsq().getCor().equals("Preto")){
+                    pai.getfilhoEsq().getfilhoDir().setCorPreto();
+                    pai.getfilhoEsq().setCorRubro();
 
-                //agora o caso vira o caso 4
-                if (pai.getfilhoEsq() != null && pai.getfilhoEsq().getfilhoEsq() != null){
-                    pai.getfilhoEsq().getfilhoEsq().setCorPreto();
-                    pai.setCorPreto();
-                    rotationDir(pai);
+                    rotationEsq(pai.getfilhoEsq());
                 }
-            }
 
-            //caso 4 - irmao é negro e filhoEsq como rubro do irmao negro
-            else if (pai.getfilhoEsq() != null && pai.getfilhoEsq().getCor().equals("Preto") && pai.getfilhoEsq().getfilhoEsq() != null && pai.getfilhoEsq().getfilhoEsq().getCor().equals("Rubro") && (pai.getfilhoEsq().getfilhoDir() == null || pai.getfilhoEsq().getfilhoDir().getCor().equals("Preto"))){
-
+                //caso 4 - filhoEsq do irmao é rubro, o irmao fica com a cor do pai
                 if (pai.getCor().equals("Rubro")){
                     pai.getfilhoEsq().setCorRubro();
+                } else {
+                    pai.getfilhoEsq().setCorPreto();
                 }
 
                 pai.setCorPreto();
