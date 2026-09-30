@@ -1,75 +1,48 @@
 package ArvoreB;
 
 public class No{
-    private Object elemento; 
-    private No filhoDir, filhoEsq, pai;
-    private int chave, altura;
+    private Object[] chaves;
+    private No[] filhos;
+    private int t;
+    private No pai;
 
-    public No(Object elemento, int chave){
-        this.elemento = elemento;
-        this.chave = chave;
-        this.altura = 0;
-        this.filhoDir = null;
-        this.filhoEsq = null;
+    public No(int t){
+        this.t = t;
+        this.chaves = new Object[2 * t - 1]; //para ter espaço 
+        this.filhos = new No[2 * t];
         this.pai = null;
     }
 
-    public void setElement(Object o){
-        this.elemento = o;
+    public int getT() {
+        return t;
     }
 
-    public Object getElement(){
-        return elemento;
+    public void setPai(No node) {
+        this.pai = node;
     }
 
-    public void setChave(int o){
-        this.chave = o;
-    }
-
-    public int getChave(){
-        return chave;
-    }
-
-    public void setPai(No node){
-         this.pai = node; 
-        
-    }
-
-    public No getPai(){
+    public No getPai() {
         return pai;
     }
-    
-    public void setfilhoDir(No node){
-        this.filhoDir = node;
 
-        if (node != null) {
-            node.setPai(this); // Atualiza o pai do filho direito
-        }
+    public void setChaves(Object[] chaves) {
+        this.chaves = chaves;
 
     }
 
-    public No getfilhoDir(){
-        return filhoDir;
+    public Object[] getChaves(){
+        return chaves;
     }
 
-    public void setfilhoEsq(No node){
-        this.filhoEsq = node;
-
-        if (node != null) {
-            node.setPai(this); // Atualiza o pai do filho esquerdo
-        }
+    public void setFilhos(No[] filhos) {
+        this.filhos = filhos;
 
     }
-    
-    public No getfilhoEsq(){
-        return filhoEsq;
+
+    public No[] getFilhos() {
+        return filhos;
     }
 
-    public void setAltura(int o){
-        this.altura = o; 
-    }
+   
 
-    public int getAltura(){
-        return altura;
-    }
 }
