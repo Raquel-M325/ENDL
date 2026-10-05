@@ -5,12 +5,17 @@ public class No{
     private No[] filhos;
     private int t;
     private No pai;
-
+    private int maximoT;
     public No(int t){
         this.t = t;
         this.chaves = new Object[2 * t - 1]; //para ter espaço 
         this.filhos = new No[2 * t];
         this.pai = null;
+        this.maximoT = 2 * t - 1;
+    }
+
+    public int getMaximoT() {
+        return maximoT;
     }
 
     public int getT() {
