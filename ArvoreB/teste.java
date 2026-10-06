@@ -1,244 +1,89 @@
 package ArvoreB;
 
-import java.util.InputMismatchException; //CORREÇÃO 1: necessario para tratar letras digitadas no lugar de numeros
 import java.util.Scanner;
 
-public class teste {
-
-    public static void main(String[] args) {
+public class teste{
+    public static void main(String[] args){
 
         Scanner entrada = new Scanner(System.in);
 
-        arvoreB arvore = new arvoreB();
+        System.out.print("Digite o grau mínimo da Árvore B: ");
+        int grau = entrada.nextInt();
 
-        int opcao = -1; //CORREÇÃO 1: precisa iniciar com valor, pois agora ela pode nao ser lida se der erro
+        arvoreB arvore = new arvoreB(grau);
 
-        do {
+        int opcao;
 
-            System.out.println();
-            System.out.println("========== ÁRVORE B ==========");
-            System.out.println("1 - Inserir nó");
-            System.out.println("2 - Remover nó");
-            System.out.println("3 - Buscar nó");
+        do{
+            System.out.println("\n========== ÁRVORE B ==========");
+            System.out.println("1 - Inserir chave");
+            System.out.println("2 - Remover chave");
+            System.out.println("3 - Buscar chave");
             System.out.println("4 - Mostrar árvore");
             System.out.println("0 - Sair");
-            System.out.println("================================");
             System.out.print("Digite uma opção: ");
 
-            //CORREÇÃO 1: se digitar letra onde é numero, o nextInt lançava InputMismatchException e o programa fechava
-            try {
+            opcao = entrada.nextInt();
 
-                opcao = entrada.nextInt();
+            switch(opcao){
 
-                switch (opcao) {
+                case 1:
+                    System.out.print("Digite a chave: ");
+                    int chaveInserir = entrada.nextInt();
 
-                    case 1:
+                    arvore.insert(chaveInserir);
 
-                        System.out.print("Digite a chave: ");
-                        int chaveInserir = entrada.nextInt();
+                    System.out.println("Chave inserida!");
+                    break;
 
-                        //CORREÇÃO 2: nao deixa inserir chave repetida (a busca ja existia, so nao era usada aqui)
-                        No existente = null;
+                case 2:
+                    System.out.print("Digite a chave a remover: ");
+                    int chaveRemover = entrada.nextInt();
 
-                        if (!arvore.isEmpty()) {
+                    try{
+                        arvore.remove(chaveRemover);
+                        System.out.println("Chave removida!");
+                    }
+                    catch(Correcao erro){
+                        System.out.println(erro.getMessage());
+                    }
 
-                            try {
-                                existente = arvore.find(new No(null, chaveInserir));
-                            } catch (Correcao erro) {
-                                existente = null; //nao achou, entao pode inserir
-                            }
+                    break;
+
+                case 3:
+                    System.out.print("Digite a chave a buscar: ");
+                    int chaveBusca = entrada.nextInt();
+
+                    try{
+                        No encontrado = arvore.find(chaveBusca);
+
+                        if (encontrado == null){
+                            System.out.println("Chave não encontrada.");
+                        } else {
+                            System.out.println("Chave encontrada!");
+                            System.out.println("Chaves do nó: " + arvore.mostrar(encontrado));
                         }
+                    }
+                    catch(Correcao erro){
+                        System.out.println(erro.getMessage());
+                    }
 
-                        if (existente != null) {
+                    break;
 
-                            System.out.println(
-                                "Já existe um nó com essa chave!"
-                            );
+                case 4:
+                    System.out.println("Árvore:");
+                    System.out.println(arvore.mostrar(arvore.root));
+                    break;
 
-                            break;
-                        }
+                case 0:
+                    System.out.println("Programa encerrado.");
+                    break;
 
-                        System.out.print("Digite o elemento: ");
-                        String elementoInserir = entrada.next();
-
-                        No novo = new No(
-                            elementoInserir,
-                            chaveInserir
-                        );
-
-                        try {
-
-                            arvore.verificarAntesInsert(
-                                novo,
-                                elementoInserir
-                            );
-
-                            System.out.println(
-                                "Nó inserido com sucesso!"
-                            );
-
-                        } catch (Correcao erro) {
-
-                            System.out.println(
-                                erro.getMessage()
-                            );
-                        }
-
-                        break;
-
-                    case 2:
-
-                        if (arvore.isEmpty()) {
-
-                            System.out.println(
-                                "Árvore vazia."
-                            );
-
-                            break;
-                        }
-
-                        System.out.print(
-                            "Digite a chave do nó a remover: "
-                        );
-
-                        int chaveRemover = entrada.nextInt();
-
-                        No remover = new No(
-                            null,
-                            chaveRemover
-                        );
-
-                        try {
-
-                            arvore.verificarAntesRemove(remover);
-
-                            System.out.println(
-                                "Nó removido com sucesso!"
-                            );
-
-                        } catch (Correcao erro) {
-
-                            //agora, se a chave nao existir, cai aqui com "Nó não encontrado"
-                            System.out.println(
-                                erro.getMessage()
-                            );
-                        }
-
-                        break;
-
-                    case 3:
-
-                        if (arvore.isEmpty()) {
-
-                            System.out.println(
-                                "Árvore vazia."
-                            );
-
-                            break;
-                        }
-
-                        System.out.print(
-                            "Digite a chave do nó a buscar: "
-                        );
-
-                        int chaveBusca = entrada.nextInt();
-
-                        No busca = new No(
-                            null,
-                            chaveBusca
-                        );
-
-                        try {
-
-                            No encontrado =
-                                arvore.find(busca);
-
-                            System.out.println(
-                                "Nó encontrado!"
-                            );
-
-                            System.out.println(
-                                "Chave: "
-                                + encontrado.getChave()
-                            );
-
-                            System.out.println(
-                                "Elemento: "
-                                + encontrado.getElement()
-                            );
-
-                            System.out.println(
-                                "Fator de altura Preto: "
-                                + arvore.alturaPreto(encontrado)
-                            );
-
-                        } catch (Correcao erro) {
-
-                            System.out.println(
-                                erro.getMessage()
-                            );
-                        }
-
-                        break;
-
-                    case 4:
-
-                        if (arvore.isEmpty()) {
-
-                            System.out.println(
-                                "Árvore vazia."
-                            );
-
-                            break;
-                        }
-
-                        try {
-
-                            System.out.println();
-                            System.out.println(
-                                "========== ÁRVORE =========="
-                            );
-
-                            System.out.println(
-                                arvore.mostrar(
-                                    arvore.getRoot()
-                                )
-                            );
-
-                        } catch (Correcao erro) {
-
-                            System.out.println(
-                                erro.getMessage()
-                            );
-                        }
-
-                        break;
-
-                    case 0:
-
-                        System.out.println(
-                            "Programa encerrado."
-                        );
-
-                        break;
-
-                    default:
-
-                        System.out.println(
-                            "Opção inválida."
-                        );
-                }
-
-            } catch (InputMismatchException erroEntrada) { //CORREÇÃO 1
-
-                entrada.nextLine(); //descarta o que foi digitado errado para nao travar em loop
-
-                System.out.println(
-                    "Entrada inválida! Digite apenas números inteiros."
-                );
+                default:
+                    System.out.println("Opção inválida.");
             }
 
-        } while (opcao != 0);
+        }while(opcao != 0);
 
         entrada.close();
     }

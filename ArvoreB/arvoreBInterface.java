@@ -1,9 +1,8 @@
 package ArvoreB;
 
 public interface arvoreBInterface{
-    String mostrar(No node);
+    No find(Object o) throws Correcao;
     void insert(Object o);
-    void remove(Object o);
-    No find(Object o);
-
+    void remove(Object o) throws Correcao;
+    String mostrar(No node);
 }
