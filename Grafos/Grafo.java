@@ -30,22 +30,23 @@ public class Grafo implements InterfaceGrafo{
             throw new Correcao("Vertice não encontrado");
         }
 
-
-        for (int i = 0; i < arestas.length; i++){
-            for (int j = 0; j < arestas[i].length; j++){
-                
-            }
-        }
-
-
         for (int i = 0; i < vertices.length; i++){
             if (vertices[i] == v){
+
+                //preciso tirar aresta que nao vai ter mais ligacao
+                for (int j = 0; j < arestas.length; j++){
+                    arestas[i][j].clear();
+                    arestas[j][i].clear();
+                }
+
                 vertices[i] = null;
                 size--;
+                return;
             }
+
         }
         
-
+        throw new Correcao("Vertice não encontrado");
     }
 
     public void removeAresta(Aresta a) {
@@ -96,8 +97,29 @@ public class Grafo implements InterfaceGrafo{
             throw new Correcao("Vertice não encontrado");
         }
 
-        
+        if (a == null){
+            throw new Correcao("Aresta não encontrada");
+        }
 
+        for (int i = 0; i < arestas.length; i++){
+            for (int j = 0; j < arestas[i].length; j++){
+                if (vertices[i] == v1 && vertices[j] == v2){  
+                    if (a.getDirecionada() == true){
+                        arestas[i][j].add(a);
+                        return;
+                    }
+
+                    //sao do mesmo sentido
+                    else{
+                        arestas[i][j].add(a);
+                        arestas[j][i].add(a);
+                        return;
+                    }
+                }
+            }
+        }   
+
+        throw new Correcao("Vertices não encontrados");
     }
 
     public boolean isAdjacent(Vertice v1, Vertice v2, Aresta a) {
@@ -113,8 +135,19 @@ public class Grafo implements InterfaceGrafo{
             throw new Correcao("Aresta não encontrada");
         }
 
-        return a.getOrigem() == v1 && a.getFim() == v2;
+        for (int i = 0; i < arestas.length; i++){
+            for (int j = 0; j < arestas[i].length; j++){
+                if (vertices[i] == v1 && vertices[j] == v2){
+                    if (arestas[i][j].contains(a)){
+                        return true;
+                    } else {
+                        return false;
+                    }
+                }
+            }
+        }
 
+        throw new Correcao("Vertices não encontrados");
     }
 
     public boolean isEmpty() {
@@ -150,14 +183,65 @@ public class Grafo implements InterfaceGrafo{
     }
 
     public Vertice[] finalVertices(Aresta a) {
+        if (isEmpty()){
+            throw new Correcao("Grafo vazio");
+        }
+
+        if (a == null){
+            throw new Correcao("Aresta não encontrada");
+        }
+
+        //ele retorna um array de vertice que é seu origem e fim que pertencem a mesma aresta
+        for (int i = 0; i < arestas.length; i++){
+            for (int j = 0; j < arestas[i].length; j++){
+                if (arestas[i][j].contains(a)){
+                    return new Vertice[]{a.getOrigem(), a.getFim()};
+                }
+            }
+        }
+
+        throw new Correcao("Aresta não encontrada");
 
     }
 
     public void substituirVertice(Vertice v, Object elemento) {
-        
+        if (isEmpty()){
+            throw new Correcao("Grafo vazio");
+        }
+
+        if (v == null){
+            throw new Correcao("Vertice não encontrado");
+        }
+
+        for (int i = 0; i < vertices.length; i++){
+            if (vertices[i] == v){
+                vertices[i].setElement(elemento);
+                return;
+            }
+        }
+
+        throw new Correcao("Vertice não encontrado");
     }
 
     public void substituirAresta(Aresta a, Object elemento) {
-        
+        if (isEmpty()){
+            throw new Correcao("Grafo vazio");
+        }
+
+        if (a == null){
+            throw new Correcao("Aresta não encontrada");
+        }
+
+        for (int i = 0; i < arestas.length; i++){
+            for (int j = 0; j < arestas[i].length; j++){
+                if (arestas[i][j].contains(a)){
+                    a.setElement(elemento);
+                    return;
+                }
+            }
+        }
+
+        throw new Correcao("Aresta não encontrada");
+    
     }
 }
