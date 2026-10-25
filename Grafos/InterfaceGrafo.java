@@ -1,5 +1,7 @@
 package Grafos;
 
+import java.util.ArrayList;
+
 public interface InterfaceGrafo{
     
     void removeVertice(Vertice v);
@@ -12,5 +14,12 @@ public interface InterfaceGrafo{
     Vertice[] finalVertices(Aresta a);
     void substituirVertice(Vertice v, Object elemento);
     void substituirAresta(Aresta a, Object elemento);
-
+    boolean isDirected(Aresta a);
+    void insertArestaDirecionada(Aresta a, Vertice v1, Vertice v2);
+    Vertice[] vertices();
+    ArrayList<Aresta>[][] arestas();
+    int grau(Vertice v);
+    int grauEntrada(Vertice v);
+    int grauSaida(Vertice v);
+    ArrayList<Aresta>[][] arestasIncidentes(Vertice v);
 }

@@ -104,6 +104,11 @@ public class Grafo implements InterfaceGrafo{
         for (int i = 0; i < arestas.length; i++){
             for (int j = 0; j < arestas[i].length; j++){
                 if (vertices[i] == v1 && vertices[j] == v2){  
+                    
+                    //precisa definir origem e fim
+                    a.setOrigem(v1);
+                    a.setFim(v2);
+
                     if (a.getDirecionada() == true){
                         arestas[i][j].add(a);
                         return;
@@ -244,4 +249,122 @@ public class Grafo implements InterfaceGrafo{
         throw new Correcao("Aresta não encontrada");
     
     }
+
+    public boolean isDirected(Aresta a){
+        if (isEmpty()){
+            throw new Correcao("Grafo vazio");
+        }
+
+        if (a == null){
+            throw new Correcao("Aresta não encontrada");
+        }
+
+        for (int i = 0; i < arestas.length; i++){
+            for (int j = 0; j < arestas[i].length; j++){
+                if (arestas[i][j].contains(a)){
+                    return a.getDirecionada();
+                }
+            } 
+        }
+
+        throw new Correcao("Aresta não encontrada");
+    }
+
+    public void insertArestaDirecionada(Aresta a, Vertice v1, Vertice v2){
+        if (isEmpty()){
+            throw new Correcao("Grafo vazio");
+        }
+
+        if (a == null){
+            throw new Correcao("Aresta não encontrada");
+        }
+
+        if (v1 == null || v2 == null){
+            throw new Correcao("Vertice não encontrado");
+        }
+
+        a.setDirecionada(true);
+
+        for (int i = 0; i < arestas.length; i++){
+            for (int j = 0; j < arestas[i].length; j++){
+
+                //toda vez que adicionar aresta, coloca origem e fim para não ficar null
+                a.setOrigem(v1);
+                a.setFim(v2);
+
+                if (vertices[i] == v1 && vertices[j] == v2){
+                    arestas[i][j].add(a);
+                    return;
+                }
+            }
+        }
+
+
+        throw new Correcao("Vertices não encontrados");
+    }
+
+    public Vertice[] vertices(){
+        if (isEmpty()){
+            throw new Correcao("Grafo vazio");
+        }
+
+        return vertices;
+    }
+
+    public ArrayList<Aresta>[][] arestas(){
+        if (isEmpty()){
+            throw new Correcao("Grafo vazio");
+        }
+
+        return arestas;
+    }
+
+    public int grau(Vertice v){
+        if (isEmpty()){
+            throw new Correcao("Grafo vazio");
+        }
+
+        if (v == null){
+            throw new Correcao("Vertice não encontrado");
+        }
+
+
+    }
+    
+    public int grauEntrada(Vertice v){
+        if (isEmpty()){
+            throw new Correcao("Grafo vazio");
+        }
+
+        if (v == null){
+            throw new Correcao("Vertice não encontrado");
+        }
+
+    }
+
+    public int grauSaida(Vertice v){
+        if (isEmpty()){
+            throw new Correcao("Grafo vazio");
+        }
+
+        if (v == null){
+            throw new Correcao("Vertice não encontrado");
+        }
+
+    }
+
+    public ArrayList<Aresta>[][] arestasIncidentes(Vertice v){
+        if (isEmpty()){
+            throw new Correcao("Grafo vazio");
+        }
+
+        if (v == null){
+            throw new Correcao("Vertice não encontrado");
+        }
+
+
+
+    }
+
+
 }
