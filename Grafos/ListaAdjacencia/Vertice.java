@@ -19,3 +19,4 @@ public class Vertice{
     }
 
 }
+// faz a implementacao aqui
