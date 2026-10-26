@@ -117,7 +117,11 @@ public class Grafo implements InterfaceGrafo{
                     //sao do mesmo sentido
                     else{
                         arestas[i][j].add(a);
-                        arestas[j][i].add(a);
+
+                        //se for laço (i == j), não pode adicionar duas vezes na mesma célula
+                        if (i != j){
+                            arestas[j][i].add(a);
+                        }
                         return;
                     }
                 }
@@ -283,16 +287,15 @@ public class Grafo implements InterfaceGrafo{
             throw new Correcao("Vertice não encontrado");
         }
 
-        a.setDirecionada(true);
-
         for (int i = 0; i < arestas.length; i++){
             for (int j = 0; j < arestas[i].length; j++){
-
-                //toda vez que adicionar aresta, coloca origem e fim para não ficar null
-                a.setOrigem(v1);
-                a.setFim(v2);
-
                 if (vertices[i] == v1 && vertices[j] == v2){
+
+                    //só altera a aresta depois de confirmar que os vertices existem
+                    a.setDirecionada(true);
+                    a.setOrigem(v1);
+                    a.setFim(v2);
+
                     arestas[i][j].add(a);
                     return;
                 }
@@ -329,13 +332,23 @@ public class Grafo implements InterfaceGrafo{
         }
 
         int grau = 0;
+        ArrayList<Aresta> contadas = new ArrayList<Aresta>();
 
         for (int i = 0; i < arestas.length; i++){
             for (int j = 0; j < arestas[i].length; j++){
                 for (Aresta a : arestas[i][j]){
                     if (v == a.getOrigem() || v == a.getFim()){
-                        
-                        
+                        if (!contadas.contains(a)){
+
+                            //laço conta 2 no grau
+                            if (a.getOrigem() == a.getFim()){
+                                grau += 2;
+                            } else {
+                                grau++;
+                            }
+                            contadas.add(a);
+                        }
+                                  
                     }
                 }
             }
@@ -394,7 +407,7 @@ public class Grafo implements InterfaceGrafo{
         return grauSaida;
     }
 
-    public ArrayList<Aresta>[][] arestasIncidentes(Vertice v) throws Correcao{
+    public ArrayList<Aresta> arestasIncidentes(Vertice v) throws Correcao{
         if (isEmpty()){
             throw new Correcao("Grafo vazio");
         }
@@ -403,13 +416,21 @@ public class Grafo implements InterfaceGrafo{
             throw new Correcao("Vertice não encontrado");
         }
 
+        ArrayList<Aresta> contadas = new ArrayList<Aresta>();
+
         for (int i = 0; i < arestas.length; i++){
             for (int j = 0; j < arestas[i].length; j++){
-                
+                for (Aresta a : arestas[i][j]){
+                    if (v == a.getOrigem() || v == a.getFim()){
+                        if (!contadas.contains(a)){
+                            contadas.add(a);
+                        }
+                    }
+                }
             }
         }
 
-        throw new Correcao("Vertice não encontrado");
-
+        return contadas;
     }
+
 }

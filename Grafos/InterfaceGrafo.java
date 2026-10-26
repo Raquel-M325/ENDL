@@ -21,5 +21,5 @@ public interface InterfaceGrafo{
     int grau(Vertice v) throws Correcao;
     int grauEntrada(Vertice v) throws Correcao;
     int grauSaida(Vertice v) throws Correcao;
-    ArrayList<Aresta>[][] arestasIncidentes(Vertice v) throws Correcao;
+    ArrayList<Aresta> arestasIncidentes(Vertice v) throws Correcao;
 }
