@@ -21,7 +21,7 @@ public class Grafo implements InterfaceGrafo{
         
     }
 
-    public void removeVertice(Vertice v) {
+    public void removeVertice(Vertice v) throws Correcao {
         if (isEmpty()){
             throw new Correcao("Grafo vazio");
         }
@@ -49,7 +49,7 @@ public class Grafo implements InterfaceGrafo{
         throw new Correcao("Vertice não encontrado");
     }
 
-    public void removeAresta(Aresta a) {
+    public void removeAresta(Aresta a) throws Correcao {
         if (isEmpty()){
             throw new Correcao("Grafo vazio");
         }
@@ -70,7 +70,7 @@ public class Grafo implements InterfaceGrafo{
         }
     }
 
-    public void insertVertice(Vertice v) {
+    public void insertVertice(Vertice v) throws Correcao {
         if (v == null){
             throw new Correcao("Vertice não encontrado");
         }
@@ -88,7 +88,7 @@ public class Grafo implements InterfaceGrafo{
 
     }
 
-    public void insertAresta(Aresta a, Vertice v1, Vertice v2) {
+    public void insertAresta(Aresta a, Vertice v1, Vertice v2) throws Correcao {
         if (isEmpty()){
             throw new Correcao("Grafo vazio");
         }
@@ -127,7 +127,7 @@ public class Grafo implements InterfaceGrafo{
         throw new Correcao("Vertices não encontrados");
     }
 
-    public boolean isAdjacent(Vertice v1, Vertice v2, Aresta a) {
+    public boolean isAdjacent(Vertice v1, Vertice v2, Aresta a) throws Correcao {
         if (isEmpty()){
             throw new Correcao("Grafo vazio");
         }
@@ -159,7 +159,7 @@ public class Grafo implements InterfaceGrafo{
         return size == 0;
     }
 
-    public Vertice oposto(Vertice v, Aresta a) {
+    public Vertice oposto(Vertice v, Aresta a) throws Correcao {
         if (isEmpty()){
             throw new Correcao("Grafo vazio");
         }
@@ -187,7 +187,7 @@ public class Grafo implements InterfaceGrafo{
 
     }
 
-    public Vertice[] finalVertices(Aresta a) {
+    public Vertice[] finalVertices(Aresta a) throws Correcao {
         if (isEmpty()){
             throw new Correcao("Grafo vazio");
         }
@@ -209,7 +209,7 @@ public class Grafo implements InterfaceGrafo{
 
     }
 
-    public void substituirVertice(Vertice v, Object elemento) {
+    public void substituirVertice(Vertice v, Object elemento) throws Correcao {
         if (isEmpty()){
             throw new Correcao("Grafo vazio");
         }
@@ -228,7 +228,7 @@ public class Grafo implements InterfaceGrafo{
         throw new Correcao("Vertice não encontrado");
     }
 
-    public void substituirAresta(Aresta a, Object elemento) {
+    public void substituirAresta(Aresta a, Object elemento) throws Correcao {
         if (isEmpty()){
             throw new Correcao("Grafo vazio");
         }
@@ -250,7 +250,7 @@ public class Grafo implements InterfaceGrafo{
     
     }
 
-    public boolean isDirected(Aresta a){
+    public boolean isDirected(Aresta a) throws Correcao{
         if (isEmpty()){
             throw new Correcao("Grafo vazio");
         }
@@ -270,7 +270,7 @@ public class Grafo implements InterfaceGrafo{
         throw new Correcao("Aresta não encontrada");
     }
 
-    public void insertArestaDirecionada(Aresta a, Vertice v1, Vertice v2){
+    public void insertArestaDirecionada(Aresta a, Vertice v1, Vertice v2) throws Correcao{
         if (isEmpty()){
             throw new Correcao("Grafo vazio");
         }
@@ -303,7 +303,7 @@ public class Grafo implements InterfaceGrafo{
         throw new Correcao("Vertices não encontrados");
     }
 
-    public Vertice[] vertices(){
+    public Vertice[] vertices() throws Correcao{
         if (isEmpty()){
             throw new Correcao("Grafo vazio");
         }
@@ -311,7 +311,7 @@ public class Grafo implements InterfaceGrafo{
         return vertices;
     }
 
-    public ArrayList<Aresta>[][] arestas(){
+    public ArrayList<Aresta>[][] arestas() throws Correcao{
         if (isEmpty()){
             throw new Correcao("Grafo vazio");
         }
@@ -319,7 +319,7 @@ public class Grafo implements InterfaceGrafo{
         return arestas;
     }
 
-    public int grau(Vertice v){
+    public int grau(Vertice v) throws Correcao{
         if (isEmpty()){
             throw new Correcao("Grafo vazio");
         }
@@ -328,10 +328,23 @@ public class Grafo implements InterfaceGrafo{
             throw new Correcao("Vertice não encontrado");
         }
 
+        int grau = 0;
 
+        for (int i = 0; i < arestas.length; i++){
+            for (int j = 0; j < arestas[i].length; j++){
+                for (Aresta a : arestas[i][j]){
+                    if (v == a.getOrigem() || v == a.getFim()){
+                        
+                        
+                    }
+                }
+            }
+        }
+
+        return grau;
     }
     
-    public int grauEntrada(Vertice v){
+    public int grauEntrada(Vertice v) throws Correcao{
         if (isEmpty()){
             throw new Correcao("Grafo vazio");
         }
@@ -340,9 +353,24 @@ public class Grafo implements InterfaceGrafo{
             throw new Correcao("Vertice não encontrado");
         }
 
+        int grauEntrada = 0;
+
+        for (int i = 0; i < arestas.length; i++){
+            for (int j = 0; j < arestas[i].length; j++){
+                for (Aresta a : arestas[i][j]){
+                   
+                    if (v == a.getFim() && a.getDirecionada() == true){
+                        grauEntrada++;
+
+                    }
+                }
+            }
+        }
+
+        return grauEntrada;
     }
 
-    public int grauSaida(Vertice v){
+    public int grauSaida(Vertice v) throws Correcao{
         if (isEmpty()){
             throw new Correcao("Grafo vazio");
         }
@@ -351,9 +379,22 @@ public class Grafo implements InterfaceGrafo{
             throw new Correcao("Vertice não encontrado");
         }
 
+        int grauSaida = 0;
+
+        for (int i = 0; i < arestas.length; i++){
+            for (int j = 0; j < arestas[i].length; j++){
+                for (Aresta a : arestas[i][j]){
+                    if (a.getDirecionada() == true && v == a.getOrigem()){
+                        grauSaida++;
+                    }
+                }
+            }
+        }
+        
+        return grauSaida;
     }
 
-    public ArrayList<Aresta>[][] arestasIncidentes(Vertice v){
+    public ArrayList<Aresta>[][] arestasIncidentes(Vertice v) throws Correcao{
         if (isEmpty()){
             throw new Correcao("Grafo vazio");
         }
@@ -362,9 +403,13 @@ public class Grafo implements InterfaceGrafo{
             throw new Correcao("Vertice não encontrado");
         }
 
+        for (int i = 0; i < arestas.length; i++){
+            for (int j = 0; j < arestas[i].length; j++){
+                
+            }
+        }
 
+        throw new Correcao("Vertice não encontrado");
 
     }
-
-
 }

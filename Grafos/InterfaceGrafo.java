@@ -4,22 +4,22 @@ import java.util.ArrayList;
 
 public interface InterfaceGrafo{
     
-    void removeVertice(Vertice v);
-    void removeAresta(Aresta a);
-    void insertVertice(Vertice v);
-    void insertAresta(Aresta a, Vertice v1, Vertice v2);
-    boolean isAdjacent(Vertice v1, Vertice v2, Aresta a);
+    void removeVertice(Vertice v) throws Correcao;
+    void removeAresta(Aresta a) throws Correcao;
+    void insertVertice(Vertice v) throws Correcao;
+    void insertAresta(Aresta a, Vertice v1, Vertice v2) throws Correcao;
+    boolean isAdjacent(Vertice v1, Vertice v2, Aresta a) throws Correcao;
     boolean isEmpty();
-    Vertice oposto(Vertice v, Aresta a);
-    Vertice[] finalVertices(Aresta a);
-    void substituirVertice(Vertice v, Object elemento);
-    void substituirAresta(Aresta a, Object elemento);
-    boolean isDirected(Aresta a);
-    void insertArestaDirecionada(Aresta a, Vertice v1, Vertice v2);
-    Vertice[] vertices();
-    ArrayList<Aresta>[][] arestas();
-    int grau(Vertice v);
-    int grauEntrada(Vertice v);
-    int grauSaida(Vertice v);
-    ArrayList<Aresta>[][] arestasIncidentes(Vertice v);
+    Vertice oposto(Vertice v, Aresta a) throws Correcao;
+    Vertice[] finalVertices(Aresta a) throws Correcao;
+    void substituirVertice(Vertice v, Object elemento) throws Correcao;
+    void substituirAresta(Aresta a, Object elemento) throws Correcao;
+    boolean isDirected(Aresta a) throws Correcao;
+    void insertArestaDirecionada(Aresta a, Vertice v1, Vertice v2) throws Correcao;
+    Vertice[] vertices() throws Correcao;
+    ArrayList<Aresta>[][] arestas() throws Correcao;
+    int grau(Vertice v) throws Correcao;
+    int grauEntrada(Vertice v) throws Correcao;
+    int grauSaida(Vertice v) throws Correcao;
+    ArrayList<Aresta>[][] arestasIncidentes(Vertice v) throws Correcao;
 }
