@@ -1,4 +1,4 @@
-package Grafos;
+package Grafos.ListaAdjacencia;
 
 
 public class Aresta{

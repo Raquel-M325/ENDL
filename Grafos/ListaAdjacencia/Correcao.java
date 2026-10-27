@@ -1,4 +1,4 @@
-package Grafos;
+package Grafos.ListaAdjacencia;
 
 public class Correcao extends RuntimeException{
     public Correcao(String erro){

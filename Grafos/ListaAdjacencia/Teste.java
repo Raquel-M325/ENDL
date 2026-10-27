@@ -1,4 +1,4 @@
-package Grafos;
+package Grafos.ListaAdjacencia;
 
 import java.util.ArrayList;
 import java.util.InputMismatchException;

@@ -1,4 +1,4 @@
-package Grafos;
+package Grafos.matriz;
 
 import java.util.ArrayList;
 import java.util.InputMismatchException;

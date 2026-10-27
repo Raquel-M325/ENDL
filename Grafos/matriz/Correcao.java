@@ -1,4 +1,4 @@
-package Grafos;
+package Grafos.matriz;
 
 public class Correcao extends RuntimeException{
     public Correcao(String erro){

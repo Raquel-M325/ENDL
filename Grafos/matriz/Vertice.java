@@ -1,4 +1,4 @@
-package Grafos;
+package Grafos.matriz;
 
 
 public class Vertice{

@@ -1,9 +1,9 @@
-package Grafos;
+package Grafos.ListaAdjacencia;
 
 
 public class Vertice{
     private Object elemento;
-
+    private 
 
     public Vertice() {
         this.elemento = null;
@@ -17,6 +17,8 @@ public class Vertice{
     public Object getElement() {
         return this.elemento;
     }
+
+
 
 }
 // faz a implementacao aqui
