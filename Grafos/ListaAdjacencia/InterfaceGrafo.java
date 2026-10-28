@@ -17,7 +17,6 @@ public interface InterfaceGrafo{
     boolean isDirected(Aresta a) throws Correcao;
     void insertArestaDirecionada(Aresta a, Vertice v1, Vertice v2) throws Correcao;
     Vertice[] vertices() throws Correcao;
-    ArrayList<Aresta>[][] arestas() throws Correcao;
     int grau(Vertice v) throws Correcao;
     int grauEntrada(Vertice v) throws Correcao;
     int grauSaida(Vertice v) throws Correcao;
