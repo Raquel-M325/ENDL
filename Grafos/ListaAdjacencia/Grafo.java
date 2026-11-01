@@ -122,24 +122,48 @@ public class Grafo implements InterfaceGrafo{
             throw new Correcao("Aresta não encontrada");
         }
 
+        //faço a verificacao dos vertices se existe dentro da lista
+        boolean encontrarV1 = false;
+        boolean encontrarV2 = false;
 
         for (int i = 0; i < vertices.length; i++){
-            if (vertices[i] != null){
-
-                int j = 0;
-
-                while (j < vertices[i].getAdjacencias().size()){
-                    if (a == vertices[i].getAdjacencias().get(j)){
-                        throw new Correcao("Aresta já existe");
-                    }
-
-                    j++;
-
-                }
+            if (vertices[i] == v1){
+                encontrarV1 = true;
             }
+
+            if (vertices[i] == v2){
+                encontrarV2 = true;
+            }
+
         }
 
-        throw new Correcao("Vertices não encontrados");
+        if (encontrarV1 == false || encontrarV2 == false){
+            throw new Correcao("Vertices não encontrados");
+        }
+
+        int j = 0;
+        
+        //verifico se a aresta ja existe na lista de adjacencias dos vertices
+        while (j < v1.getAdjacencias().size()){
+            if (v1.getAdjacencias().get(j) == a){
+                throw new Correcao("Aresta já existe");
+            }
+
+            j++;
+        }
+
+        j = 0;
+
+        while (j < v2.getAdjacencias().size()){
+            if (v2.getAdjacencias().get(j) == a){
+                throw new Correcao("Aresta já existe");
+            }
+
+            j++;
+        }
+
+        v1.getAdjacencias().add(a);
+        v2.getAdjacencias().add(a);
     }
 
     public boolean isAdjacent(Vertice v1, Vertice v2, Aresta a) throws Correcao {
@@ -155,19 +179,57 @@ public class Grafo implements InterfaceGrafo{
             throw new Correcao("Aresta não encontrada");
         }
 
+        boolean encontrarV1 = false;
+        boolean encontrarV2 = false;
+        boolean encontrarArestaV1 = false;
+        boolean encontrarArestaV2 = false;
+
         for (int i = 0; i < vertices.length; i++){
-            if (vertices[i]){
+            if (vertices[i] == v1){
+                encontrarV1 = true;
+            }
 
-                int j = 0;
-
-                while (j < vertices[i].getAdjacencias().size()){
-
-                }
+            if (vertices[i] == v2){
+                encontrarV2 = true;
             }
         }
 
+        if (encontrarV1 == false || encontrarV2 == false){
+            throw new Correcao("Vertices não encontrados");
+        }
 
-        throw new Correcao("Vertices não encontrados");
+
+        int j = 0;
+        while (j < v1.getAdjacencias().size()){
+            if (v1.getAdjacencias().get(j) == a){
+                encontrarArestaV1 = true;
+            }
+
+            j++;
+        }
+
+        j = 0;
+
+        while (j < v2.getAdjacencias().size()){
+            if (v2.getAdjacencias().get(j) == a){
+                encontrarArestaV2 = true;
+            }
+
+            j++;
+        }
+
+        if (encontrarArestaV1 == false || encontrarArestaV2 == false){
+            throw new Correcao("Aresta não encontrada");
+        }
+
+        if (a.getOrigem() == v1 && a.getFim() == v2){
+            return true;
+        } else if (a.getOrigem() == v2 && a.getFim() == v1){
+            return true;
+        } else {
+            return false;
+        }
+
     }
 
     public boolean isEmpty() {
@@ -261,6 +323,7 @@ public class Grafo implements InterfaceGrafo{
 
                 while (j < vertice[i].getAdjacencias().size()){
 
+
                 }
             }
         }
@@ -278,18 +341,36 @@ public class Grafo implements InterfaceGrafo{
             throw new Correcao("Aresta não encontrada");
         }
 
+        boolean direcionado = false;
+
         for (int i = 0; i < vertices.length; i++){
-            if (vertices[i]){
+            if (vertices[i] != null){
 
                 int j = 0;
 
                 while (j < vertices[i].getAdjacencias().size()){
+                    if (vertices[i].getAdjacencias().get(j) == a){
+                        
+                       if (a.getDirecionada() == true){
+                            direcionado = true;
+                            return direcionado;
+                        } else {
+                            direcionado = false;
+                            return direcionado;
+                        }
+                    }
 
+                    j++;
                 }
             }
         }
 
-        throw new Correcao("Aresta não encontrada");
+        if (direcionado == false){
+            throw new Correcao("Aresta não encontrada");
+        }
+
+        return direcionado;
+
     }
 
     public void insertArestaDirecionada(Aresta a, Vertice v1, Vertice v2) throws Correcao{
@@ -305,6 +386,47 @@ public class Grafo implements InterfaceGrafo{
             throw new Correcao("Vertice não encontrado");
         }
 
+        boolean encontrarV1 = false;
+        boolean encontrarV2 = false;
+        boolean encontrarArestaV1 = false;
+        boolean encontrarArestaV2 = false;
+
+        for (int i = 0; i < vertices.length; i++){
+            if (vertices[i] == v1){
+                encontrarV1 = true;
+            }
+
+            if (vertices[i] == v2){
+                encontrarV2 = true;
+            }
+        }
+
+        if (encontrarV1 == false || encontrarV2 == false){
+            throw new Correcao("Vertices não encontrados");
+        }
+
+        int j = 0;
+        while (j < v1.getAdjacencias().size()){
+            if (v1.getAdjacencias().get(j) == a){
+                encontrarArestaV1 = true;
+            }
+
+            j++;
+        }
+
+        j = 0;
+        while (j < v2.getAdjacencias().size()){
+            if (v2.getAdjacencias().get(j) == a){
+                encontrarArestaV2 = true;
+            }
+            j++;
+        }   
+
+        if (encontrarArestaV1 == false || encontrarArestaV2 == false){
+            throw new Correcao("Aresta não encontrada");
+        }
+
+
         for (int i = 0; i < vertices.length; i++){
             if (vertices[i]){
 
@@ -316,8 +438,9 @@ public class Grafo implements InterfaceGrafo{
             }
         }
 
+        v1.getAdjacencias().add(a);
+        v2.getAdjacencias().add(a);
 
-        throw new Correcao("Vertices não encontrados");
     }
 
     public Vertice[] vertices() throws Correcao{
