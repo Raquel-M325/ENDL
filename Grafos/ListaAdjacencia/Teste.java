@@ -1,3 +1,4 @@
+
 package Grafos.ListaAdjacencia;
 
 import java.util.ArrayList;
@@ -37,6 +38,7 @@ public class Teste {
             System.out.println("15 - Grau de entrada do vertice");
             System.out.println("16 - Grau de saida do vertice");
             System.out.println("17 - Arestas incidentes ao vertice");
+            System.out.println("18 - Mostrar grafo");
             System.out.println("0 - Sair");
             System.out.print("Escolha uma opcao: ");
 
@@ -100,6 +102,9 @@ public class Teste {
                         Aresta a = new Aresta();
                         a.setElement(elemento);
 
+                        a.setOrigem(vertices[origem]);
+                        a.setFim(vertices[destino]);
+
                         if (resposta.equalsIgnoreCase("s")) {
                             grafo.insertArestaDirecionada(a, vertices[origem], vertices[destino]);
                         } else {
@@ -130,8 +135,6 @@ public class Teste {
                         grafo.removeVertice(removido);
                         vertices[indice] = null;
 
-                        // o grafo apagou as arestas ligadas a esse vertice,
-                        // entao o teste tambem esquece essas arestas
                         for (int k = 0; k < arestas.length; k++) {
                             if (arestas[k] != null
                                     && (arestas[k].getOrigem() == removido
@@ -287,7 +290,6 @@ public class Teste {
                         for (int i = 0; i < lista.length; i++) {
                             if (lista[i] != null) {
 
-                                // descobre o indice do vertice no teste
                                 int indice = -1;
                                 for (int k = 0; k < vertices.length; k++) {
                                     if (vertices[k] == lista[i]) {
@@ -303,16 +305,15 @@ public class Teste {
                     }
 
                     case 13: {
-                        ArrayList<Aresta>[][] matriz = grafo.arestas();
+                        Vertice[] lista = grafo.vertices();
                         ArrayList<Aresta> vistas = new ArrayList<Aresta>();
 
-                        for (int i = 0; i < matriz.length; i++) {
-                            for (int j = 0; j < matriz[i].length; j++) {
-                                for (Aresta a : matriz[i][j]) {
+                        for (int i = 0; i < lista.length; i++) {
+                            if (lista[i] != null) {
+                                for (Aresta a : lista[i].getAdjacencias()) {
                                     if (!vistas.contains(a)) {
                                         vistas.add(a);
 
-                                        // descobre o indice da aresta no teste
                                         int indice = -1;
                                         for (int k = 0; k < arestas.length; k++) {
                                             if (arestas[k] == a) {
@@ -396,7 +397,6 @@ public class Teste {
 
                         for (Aresta a : incidentes) {
 
-                            // descobre o indice da aresta no teste
                             int indice = -1;
                             for (int k = 0; k < arestas.length; k++) {
                                 if (arestas[k] == a) {
@@ -406,6 +406,64 @@ public class Teste {
 
                             System.out.println("Aresta " + indice + " [" + a.getElement() + "]");
                         }
+                        break;
+                    }
+
+                    case 18: {
+                        System.out.println("\n===== REPRESENTACAO DO GRAFO =====");
+
+                        boolean encontrouVertice = false;
+
+                        for (int i = 0; i < vertices.length; i++) {
+                            if (vertices[i] != null) {
+                                encontrouVertice = true;
+
+                                Vertice v = vertices[i];
+
+                                System.out.println("\nVertice " + i + " ["
+                                        + v.getElement() + "]:");
+
+                                if (v.getAdjacencias().isEmpty()) {
+                                    System.out.println("  Sem arestas.");
+                                } else {
+
+                                    for (Aresta a : v.getAdjacencias()) {
+
+                                        if (a.getDirecionada() == true) {
+
+                                            if (a.getOrigem() == v) {
+                                                System.out.println("  -> "
+                                                        + a.getFim().getElement()
+                                                        + " [" + a.getElement() + "]");
+                                            } else {
+                                                System.out.println("  <- "
+                                                        + a.getOrigem().getElement()
+                                                        + " [" + a.getElement() + "]");
+                                            }
+
+                                        } else {
+
+                                            Vertice oposto;
+
+                                            if (a.getOrigem() == v) {
+                                                oposto = a.getFim();
+                                            } else {
+                                                oposto = a.getOrigem();
+                                            }
+
+                                            System.out.println("  -- "
+                                                    + oposto.getElement()
+                                                    + " [" + a.getElement() + "]");
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        if (encontrouVertice == false) {
+                            System.out.println("Grafo vazio.");
+                        }
+
                         break;
                     }
 
@@ -421,7 +479,6 @@ public class Teste {
                 System.out.println("Erro: " + e.getMessage());
 
             } catch (InputMismatchException e) {
-                // usuario digitou texto onde era numero
                 entrada.nextLine();
                 System.out.println("Entrada invalida. Digite um numero.");
             }
