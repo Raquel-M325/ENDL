@@ -2,6 +2,8 @@ package Algoritmo.A.A;
 import java.util.List;
 import Algoritmo.A.Correcao;
 import java.util.PriorityQueue;
+import java.util.ArrayList;
+import java.util.List; 
 
 public class AlgoritmoEstrela implements InterfaceEstrela{
     private PriorityQueue<No> filaPrioridade;
@@ -22,17 +24,21 @@ public class AlgoritmoEstrela implements InterfaceEstrela{
         return filaPrioridade.poll();
     }
 
-
+    //precisa ter o calculo de quanto falta percorrer
     public int calcularH(No no, No destino){
-        return 0;
+        return Math.abs(no.getLinha() - destino.getLinha()) + Math.abs(no.getColuna() - destino.getColuna()); 
     }
 
-    public List<No> recuperarCaminho(No no) throws Correcao{
-        if (isEmpty()){
-            throw new Correcao("Nem houve caminho para recuperar");
+    public List<No> recuperarCaminho(No no) throws Correcao {
+
+        List<No> caminho = new ArrayList<>();
+
+        while (no != null) {
+            caminho.add(0, no);
+            no = no.getPassoAnterior();
         }
-        
-        return null;
+
+        return caminho;
     }
 
     public List<No> findCaminho(No inicio, No destino) throws Correcao{
