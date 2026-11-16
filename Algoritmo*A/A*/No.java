@@ -1,6 +1,6 @@
 package Algoritmo.A;
 
-public class No {
+public class No implements Comparable<No> {
     private int linha, coluna;
     private int g, h, f;
     private No passoAnterior;
@@ -12,6 +12,11 @@ public class No {
         this.h = 0;
         this.f = g + h;
         this.passoAnterior = null;
+    }
+
+    @Override
+    public int compareTo(No outroNo) {
+        return Integer.compare(this.f, outroNo.f);
     }
 
     public int getLinha() {

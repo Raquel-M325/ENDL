@@ -1,7 +1,7 @@
 package Algoritmo.A.Dijkstra;
 
 
-public class No {
+public class No implements Comparable<No> {
     private int linha, coluna;
     private int custo;
     private No passoAnterior;
@@ -11,6 +11,11 @@ public class No {
         this.coluna = coluna;
         this.custo = 0;
         this.passoAnterior = null;
+    }
+    
+    @Override
+    public int compareTo(No outroNo) {
+        return Integer.compare(this.custo, outroNo.custo);
     }
 
     public int getLinha() {
