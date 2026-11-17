@@ -2,7 +2,6 @@ package Algoritmo.A.Dijkstra;
 import java.util.List;
 import java.util.PriorityQueue;
 import java.util.ArrayList;
-import java.util.List; 
 import Algoritmo.A.Correcao;
 
 public class AlgoritmoDijkstra implements InterfaceDijkstra{
@@ -36,12 +35,8 @@ public class AlgoritmoDijkstra implements InterfaceDijkstra{
         return caminho;
     }
 
-    public List<No> findCaminho(No inicio, No destino) throws Correcao{
-        if (isEmpty()){
-            throw new Correcao("Lista vazia para encontrar caminho");
-        }
-        
-        return null;
+    public List<No> findCaminho(No inicio, No destino){
+        inicio.set
     }
 
     public boolean isEmpty(){

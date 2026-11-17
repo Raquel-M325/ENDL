@@ -3,7 +3,6 @@ import java.util.List;
 import Algoritmo.A.Correcao;
 import java.util.PriorityQueue;
 import java.util.ArrayList;
-import java.util.List; 
 
 public class AlgoritmoEstrela implements InterfaceEstrela{
     private PriorityQueue<No> filaPrioridade;
@@ -41,10 +40,8 @@ public class AlgoritmoEstrela implements InterfaceEstrela{
         return caminho;
     }
 
-    public List<No> findCaminho(No inicio, No destino) throws Correcao{
-        if (isEmpty()){
-            throw new Correcao("Lista vazia para encontrar caminho");
-        }
+    public List<No> findCaminho(No inicio, No destino){
+  
         
         return null;
     }
