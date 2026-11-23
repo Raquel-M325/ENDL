@@ -58,4 +58,24 @@ public class No implements Comparable<No> {
     public void setPassoAnterior(No passoAnterior) {
         this.passoAnterior = passoAnterior;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+
+        No outro = (No) obj;
+
+        return linha == outro.linha && coluna == outro.coluna;
+    }
+
+    @Override
+    public int hashCode() {
+        return java.util.Objects.hash(linha, coluna);
+    }
 }

@@ -1,4 +1,4 @@
-package Algoritmo.A;
+package Algoritmo;
 
 public class Correcao extends RuntimeException{
     public Correcao(String err){
